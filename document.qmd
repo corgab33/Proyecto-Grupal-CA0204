@@ -1,0 +1,178 @@
+---
+title: "Avance 2: exploración y preparación de datos"
+subtitle: "Proyecto grupal CA0204 — Cine en datos"
+
+author: |-
+  José Gabriel Coronel Cascante — C5E486 \
+  Gabriel Jop Baltodano — C5G338 \
+  Lemuel Méndez Hidalgo — C24750 \
+  Andrés Salas Acuña — C37104 \
+  Jean Carlo Sanabria Martínez — C37241
+
+date: "II ciclo, 2026"
+lang: es
+
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 1.8cm
+      y: 1.6cm
+    fontsize: 10pt
+    toc: false
+    number-sections: false
+    fig-format: png
+    fig-dpi: 200
+
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## Objetivo del Proyecto
+
+El objetivo del presente trabajo es analizar el conjunto de datos de
+las 1000 películas mejor calificadas en IMDb, para observar que
+características se relacionan con calificaciones positivas de parte
+del público, las críticas especializadas, y el éxito en general. A
+partir de la depuración de los datos y luego una exploración, se
+buscarán patrones para identificar las variables más influyentes.
+
+
+## Lectura de Datos
+
+Primero, se importan las librerías necesarias. En este caso, `readr`
+para la lectura de los datos y `magrittr, dplyr` para la manipulación
+de estos.
+
+```{r}
+
+library(readr)
+library(magrittr)
+library(dplyr)
+
+```
+
+Luego, importamos el dataset a partir de un archivo `.csv`, mediante la librería `readr`
+
+``` {r}
+
+df.original <- read_csv("data/imdb_top_1000.csv")
+
+```
+
+## Manipulación y Presentación de Datos
+
+Para empezar, se inspecciona el `dataframe` brevemente i.e. mostrar
+una selección de datos de las primeras 8 filas y un resumen de los
+contenidos.
+
+``` {r}
+
+df.original %>%
+  select(Series_Title, Released_Year, Genre, IMDB_Rating, Meta_score) %>%
+  head(8) %>%
+  knitr::kable(
+    col.names = c(
+      "Película", "Año", "Género",
+      "Calificación IMDb", "Metascore"
+    ),
+    caption = "Muestra de ocho películas del conjunto de datos."
+  )
+
+df.original %>% glimpse()
+
+```
+
+Luego, se genera y modifica otro `dataframe` a partir de
+`df.original`, con el fin de facilitar nuestro análisis.
+
+1. Se elimina la columna `poster`
+
+``` {r}
+
+df <- df.original %>% 
+    select(-Poster_Link)
+
+```
+
+2. Se crea una columna `id` según el rating
+
+``` {r}
+
+df <- df %>% 
+    mutate(id = 1:dim(df)[1]) %>% 
+    select(id, everything())
+
+```
+
+3. Se cambian las clases de datos a `numeric`
+
+``` {r}
+
+df <- df %>% 
+    mutate(IMDB_Rating = as.numeric(IMDB_Rating), 
+         Meta_score = as.integer(Meta_score))
+
+```
+
+## Una Primera Exploración de los Datos
+
+Una vez que se hacen las modificaciones anteriores, inspeccionamos a
+`df`.
+
+Se cuentan la cantidad de observaciones `NA` por cada columna de `df`.
+
+``` {r}
+
+na.columnas <- df %>% 
+                is.na() %>% 
+                colSums()
+
+#Quita las columnas que no tienen NA
+na.columnas <- na.columnas[na.columnas > 0]
+
+# Presentación del PDF
+names(na.columnas) <- c("Certificado",
+                        "Meta_score",
+                        "Ingresos Brutos"
+                        )
+
+knitr::kable(na.columnas,
+             col.names = "NA por columna",
+             caption = "tabla con columnas que tienen NA y cuantos")
+
+```
+
+Se analizan las críticas (e.g. la correlación público vs crítica),
+promediando las calificaciones del público y las de los críticos.
+
+``` {r}
+
+correlacion <- cor(df$IMDB_Rating,df$Meta_score, use = "complete.obs")
+
+
+promedio.critica <- mean(df$Meta_score, na.rm = TRUE)/10
+
+promedio.publico <- mean(df$IMDB_Rating, na.rm = TRUE)
+
+```
+
+Por último, se genera otro `dataframe` con los indicadores a mostrar.
+
+``` {r}
+
+indicadores <- tibble(
+  indicador = c("Correlacion IMDB vs Metascore",
+                "Promedio IMBD",
+                "Promedio Metascore"),
+  valor = c(correlacion, promedio.critica, promedio.publico)
+) %>% 
+  mutate(valor = round(valor, 2))
+
+knitr::kable(indicadores,
+             caption = "3 datos iniciales del dataset")
+
+```
+
