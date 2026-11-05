@@ -68,6 +68,8 @@ de estos.
 library(readr)
 library(magrittr)
 library(dplyr)
+library(tidyr)
+library(knitr)
 
 ```
 
@@ -390,7 +392,133 @@ knitr::kable(
   caption = "Calificación promedio según rango de duración"
 )
 ```
-Como se puede observar, las películas con una duración de dos horas y media o superior (150 minutos o más) tienden a tener una calificación superior.
+
+Como se puede observar, las películas con una duración de dos horas y
+media o superior (150 minutos o más) tienden a tener una calificación
+superior.
+
+El protagonista de una película y quién dirige tal película,
+constituyen partes importantes de la fórmula ganadora. Por tal razón,
+se analiza la relación entre el ingreso de una película, su
+calificación en IMDb, su director y protagonista. Específicamente, se
+consideran los actores protagonistas y directores cuyas películas en
+promedio generan las calificaciones más altas o los mayores
+ingresos. En este caso, *promedio*, se refiere a la media bayesiana
+con una parámetro de confianza de $k = 4$, esto para contemplar los
+promedios artificialmente altos debido una pequeña cantidad de
+películas asociadas.
+
+``` {r}
+#| echo: false
+
+# Se excluyen filas con rating e ingreso con NA, y solo se seleccionan
+# las columnas relevantes para esta parte del análisis.
+
+df.actors.directors <- df.original |>
+    drop_na(IMDB_Rating, Gross) |>
+    rename(title = Series_Title, rating = IMDB_Rating, revenue = Gross, protagonist = Star1, director = Director) |>
+    select(title, rating, revenue, protagonist, director)
+
+# Se calcula el promedio global de las variables rating y ingreso,
+# para poder calcular la media Bayesiana
+global.mean.rating <- mean(df.actors.directors$rating)
+global.mean.revenue <- mean(df.actors.directors$revenue)
+
+# Se considera que cuatro películas son suficientes para confiar en el
+# promedio de cada actor.
+trust.parameter <- 4
+
+bayesian.mean <- function(n, group.mean, global.mean) {
+    (n * group.mean + trust.parameter * global.mean) / (n + trust.parameter)
+}
+
+# Agrupación por protagonista
+
+actors.grouping <- df.actors.directors |>
+    summarise(
+        n = n(),
+        group.mean.rating = mean(rating),
+        group.mean.revenue = mean(revenue),
+        mean.rating = bayesian.mean(n, group.mean.rating, global.mean.rating),
+        mean.revenue = bayesian.mean(n, group.mean.revenue, global.mean.revenue),
+        .by = "protagonist"
+    ) |>
+    select(protagonist, mean.rating, mean.revenue)
+
+# Agrupación por director
+
+directors.grouping <- df.actors.directors |>
+    summarise(
+        n = n(),
+        group.mean.rating = mean(rating),
+        group.mean.revenue = mean(revenue),
+        mean.rating = bayesian.mean(n, group.mean.rating, global.mean.rating),
+        mean.revenue = bayesian.mean(n, group.mean.revenue, global.mean.revenue),
+        .by = "director"
+    ) |>
+    select(director, mean.rating, mean.revenue)
+
+```
+
+``` {r}
+
+# Tabla de protagonistas por calificación
+actors.grouping |>
+    select(protagonist, mean.rating) |>
+    arrange(desc(mean.rating)) |>
+    head(3) |>
+    kable(
+        col.names = c("Protagonista", "Calificación IMDb Promedio"),
+        caption = "Los tres protagonistas con mayor calificación promedio en IMDb"
+    )
+
+# Tabla de protagonistas por ingreso
+actors.grouping |>
+    select(protagonist, mean.revenue) |>
+    arrange(desc(mean.revenue)) |>
+    head(3) |>
+    kable(
+        col.names = c("Protagonista", "Ingresos Generados Promedio"),
+        caption = "Los tres protagonistas con mayores ingresos generados en promedio"
+    )
+
+```
+
+Con respecto al protagonista, se observa que en promedio los actores
+Elijah Wood, Tim Robbins y Mark Hamill generan en promedio las mayores
+calificaciones en la plataforma IMDb. Por otro lado, son Joe Russo,
+Daisy Ridley y Daniel Radcliffe quienes producen en promedio el mayor
+éxito comercial.
+
+``` {r}
+
+# Tabla de directores por calificación
+directors.grouping |>
+    select(director, mean.rating) |>
+    arrange(desc(mean.rating)) |>
+    head(3) |>
+    kable(
+        col.names = c("Director", "Calificación IMDb Promedio"),
+        caption = "Los tres directores con mayor calificación promedio en IMDb"
+    )
+
+# Tabla de directores por ingreso
+directors.grouping |>
+    select(director, mean.revenue) |>
+    arrange(desc(mean.revenue)) |>
+    head(3) |>
+    kable(
+        col.names = c("Director", "Ingresos Generados Promedio"),
+        caption = "Los tres directores con mayores ingresos generados en promedio"
+    )
+
+```
+
+Además, se observa que Christopher Nolan, Frank Darabont y Francis
+Ford Coppola son los directores que en promedio contribuyen a una
+mayor calificación de IMDb. Con respecto al aspecto comercial, Anthony
+Russo, J. J. Abrams y James Cameron son los directores más exitosos en
+promedio.
 
 ## Bibliografía
 
