@@ -1,6 +1,6 @@
 ---
 title: "Grupo_1_HerramientasDatosI_2026"
-subtitle: "Proyecto grupal CA0204 — Cine en datos"
+subtitle: "Universidad de Costa Rica — CA0204 Herramientas de Datos I — Cine en datos"
 
 author: |-
   José Gabriel Coronel Cascante — C5E486 \
@@ -9,7 +9,8 @@ author: |-
   Andrés Salas Acuña — C37104 \
   Jean Carlo Sanabria Martínez — C37241
 
-date: "II ciclo, 2026"
+date: 2026-11-06
+date-format: long
 lang: es
 
 format:
@@ -30,7 +31,9 @@ execute:
   message: false
 ---
 
-## Base de datos
+## Introducción
+
+<!-- Pendiente: completar contexto, relevancia (máx. 1 página). -->
 
 El dataset que se plantea usar en el proyecto es el siguiente: [Top 1000 IMDB movies](https://doi.org/10.34740/kaggle/dsv/3954453).
 
@@ -39,8 +42,9 @@ Los datos se recopilaron a través del método *web scraping* desde la página w
 
 Este dataset incluye las 1000 mejores peliculas de la historia, a nivel global; usando como periodo de cobertura desde el año 1975 hasta 2022 (última actualización), según la página dedicada al cine y la televisión IMDb (Internet Movie Database), donde se incluye entre otras cosas sinopsis de peliculas, teasers, recomendaciones, reseñas y calificaciones tanto del público *(IMDb rating)* como de la crítica especializada *(Meta score)*.
 
+## Objetivo general
 
-## Objetivo del Proyecto
+<!-- Pendiente: dejar un solo objetivo claro y alcanzable (2 a 4 líneas). -->
 
 El objetivo del presente trabajo es analizar el conjunto de datos de
 las 1000 películas mejor calificadas en IMDb, para observar que
@@ -51,8 +55,9 @@ taquilla, sea amada por el público y al mismo tiempo alabada por la
 crítica?. Para responder tal preguntá se buscará construir una "fórmula
 ganadora" que exponga las principales conclusiones del proyecto.
 
+## Metodología
 
-## Lectura de Datos
+### Datos
 
 Primero, se importan las librerías necesarias. En este caso, `readr`
 para la lectura de los datos y `magrittr, dplyr` para la manipulación
@@ -76,9 +81,81 @@ df.original <- read_csv("../data/imdb_top_1000.csv")
 
 ```
 
-## Manipulación y Presentación de Datos
-
 El `dataframe` contiene diferentes características de las películas, muestra un link al poster, el título, año de lanzamiento, certificado de contenidos (clasificación por edades), duración, géneros, calificación IMDb (de 0 a 10), descripción, puntuación por críticas (de 0 a 100), director, actores/actrices principales, número de votos e ingresos brutos. Información encontrada mediante la función `df.original %>% glimpse()` y traducido por el equipo
+
+### Limpieza y preparación
+
+Luego, se genera y modifica otro `dataframe` a partir de
+`df.original`, con el fin de facilitar nuestro análisis.
+
+**1. Se elimina la columna `poster`**
+
+La variable `Poster_Link` contiene únicamente el enlace a la imagen del póster
+de cada película. Por  lo que no aporta un valor cuantitativo o categórico relevante
+para los análisis planteados en este avance
+
+``` {r}
+
+df <- df.original %>% 
+    select(-Poster_Link)
+
+```
+
+**2. Se crea una columna `id` según el rating**
+
+Se agrega una variable `id` con valores consecutivos para identificar de manera
+única cada fila del `dataframe`. Se presenta de mayor a menor calificación IMDb. De esta forma, el `id` permite ubicar y referenciar con mayor facilidad cada observación durante la manipulación de los datos. 
+
+``` {r}
+
+df <- df %>% 
+    mutate(id = 1:dim(df)[1]) %>% 
+    select(id, everything())
+
+```
+
+**3. Se ajustan las clases de datos**
+
+Las variables `IMDB_Rating`, `Meta_score`, `Runtime` y `Gross`  representan datos numéricos y
+serán utilizadas posteriormente para realizar operaciones estadísticas, como
+promedios y correlaciones. Por ello, se convierten explícitamente a clase de
+datos `numeric` para el rating y no perder decimales e `integer` para los demás, pues no contienen decimales y se ahorra espacio en la memoria, con el fin de garantizar que R las reconozca como variables cuantitativas.
+
+``` {r}
+
+df <- df %>% 
+    mutate(IMDB_Rating = as.numeric(IMDB_Rating), 
+         Meta_score = as.integer(Meta_score),
+         Runtime = as.integer(gsub(" min", "", Runtime)),
+         Gross = as.integer(gsub(",", "", Gross)),
+         Released_Year = as.integer(Released_Year)
+         )
+
+df$Released_Year[which(is.na(df$Released_Year))] <- 1985
+#Dato extraído de internet 
+
+
+```
+
+```{r}
+#Filtramos la data para quitar las filas o peliculas que no tienen calificación de Meta_Score:
+
+df.dep <- df %>% filter(!is.na(Meta_score))
+
+df.dep <- df.dep %>% select(-Certificate) 
+
+
+```
+
+### Técnicas y herramientas
+
+<!-- Pendiente: describir cada técnica y cómo responde al objetivo. -->
+
+## Resultados
+
+<!-- Mínimo 50 % del informe. Cada figura o tabla: hallazgo, evidencia, interpretación e implicación para el objetivo. -->
+
+### Análisis exploratorio
 
 Para empezar, se muestran las características principales del `dataframe` orginal, señalando la totalidad de películas, registros, cantidad de variables, distribución de géneros y directores y un rango en años de lanzamiento
 
@@ -142,7 +219,7 @@ data.frame(
   )
 ```
 
-### Géneros más comunes 
+#### Géneros más comunes 
 
 ```{r}
 #| echo: false
@@ -169,8 +246,7 @@ knitr::kable(
 *Nota: Una misma película puede pertenecer a más de un género, por lo que puede ser contabilizada en varias categorías.*
 </span>
 
-
-### Directores con mayor lanzamiento de películas
+#### Directores con mayor lanzamiento de películas
 
 ```{r}
 #| echo: false
@@ -186,7 +262,6 @@ knitr::kable(
   caption = "Los ocho directores con mayor número de películas en el conjunto de datos."
 )
 ```
-
 
 Seguidamente, se inspecciona el `dataframe` brevemente, mostrando
 una selección de datos de las primeras 5 filas y un resumen de los
@@ -213,60 +288,6 @@ df.original %>%
 *Nota: la tabla anterior no representa el total de las variables del dataset debido al tamaño se optó por mostrar solo las cinco principales columnas. Las otras variables incluyen datos como: el director, las principales estrellas, taquilla, la descripción, duración, certificación, etc.*
 </span>
 
-Luego, se genera y modifica otro `dataframe` a partir de
-`df.original`, con el fin de facilitar nuestro análisis.
-
-**1. Se elimina la columna `poster`**
-
-La variable `Poster_Link` contiene únicamente el enlace a la imagen del póster
-de cada película. Por  lo que no aporta un valor cuantitativo o categórico relevante
-para los análisis planteados en este avance
-
-``` {r}
-
-df <- df.original %>% 
-    select(-Poster_Link)
-
-```
-
-**2. Se crea una columna `id` según el rating**
-
-Se agrega una variable `id` con valores consecutivos para identificar de manera
-única cada fila del `dataframe`. Se presenta de mayor a menor calificación IMDb. De esta forma, el `id` permite ubicar y referenciar con mayor facilidad cada observación durante la manipulación de los datos. 
-
-``` {r}
-
-df <- df %>% 
-    mutate(id = 1:dim(df)[1]) %>% 
-    select(id, everything())
-
-```
-
-**3. Se ajustan las clases de datos**
-
-Las variables `IMDB_Rating`, `Meta_score`, `Runtime` y `Gross`  representan datos numéricos y
-serán utilizadas posteriormente para realizar operaciones estadísticas, como
-promedios y correlaciones. Por ello, se convierten explícitamente a clase de
-datos `numeric` para el rating y no perder decimales e `integer` para los demás, pues no contienen decimales y se ahorra espacio en la memoria, con el fin de garantizar que R las reconozca como variables cuantitativas.
-
-``` {r}
-
-df <- df %>% 
-    mutate(IMDB_Rating = as.numeric(IMDB_Rating), 
-         Meta_score = as.integer(Meta_score),
-         Runtime = as.integer(gsub(" min", "", Runtime)),
-         Gross = as.integer(gsub(",", "", Gross)),
-         Released_Year = as.integer(Released_Year)
-         )
-
-df$Released_Year[which(is.na(df$Released_Year))] <- 1985
-#Dato extraído de internet 
-
-
-```
-
-## Una Primera Exploración de los Datos
-
 Cantidad de observaciones `NA` por cada columna de `df`.
 
 ``` {r}
@@ -289,8 +310,6 @@ knitr::kable(na.columnas,
              caption = "tabla con columnas que tienen NA y cuantos")
 
 ```
-
-
 
 ``` {r}
 
@@ -326,6 +345,7 @@ knitr::kable(indicadores,
 
 ```
 
+### Resultados de la metodología
 
 Se analizan varios factores que podrían determinar la popularidad o afectar su calificación.
 Iniciamos analizando la duración y cuales promedios tienen una calificación más alta.
@@ -371,13 +391,13 @@ knitr::kable(
 )
 ```
 Como se puede observar, las películas con una duración de dos horas y media o superior (150 minutos o más) tienden a tener una calificación superior.
-```{r}
-#Filtramos la data para quitar las filas o peliculas que no tienen calificación de Meta_Score:
 
-df.dep <- df %>% filter(!is.na(Meta_score))
+## Bibliografía
 
-df.dep <- df.dep %>% select(-Certificate) 
+<!-- Pendiente: referencias en formato APA 7. -->
 
+## Anexos
 
-```
+Repositorio del proyecto: <https://github.com/corgab33/Proyecto-Grupal-CA0204>
 
+<!-- Pendiente: gráficos o tablas de alto valor, sin código. -->
