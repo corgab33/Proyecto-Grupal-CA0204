@@ -71,7 +71,7 @@ Luego, importamos el dataset a partir de un archivo `.csv`, mediante la librerí
 ``` {r}
 
 
-df.original <- read_csv("data/imdb_top_1000.csv")
+df.original <- read_csv("../data/imdb_top_1000.csv")
 
 
 ```
@@ -370,7 +370,7 @@ knitr::kable(
   caption = "Calificación promedio según rango de duración"
 )
 ```
-como se puede observar, las películas con una duración de dos horas y media o superior (150 minutos o más) tienden a tener una calificación superior.
+Como se puede observar, las películas con una duración de dos horas y media o superior (150 minutos o más) tienden a tener una calificación superior.
 <<<<<<< HEAD
 ```{r}
 #Filtramos la data para quitar las filas o peliculas que no tienen calificación de Meta_Score:
