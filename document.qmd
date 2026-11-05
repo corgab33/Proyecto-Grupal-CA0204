@@ -333,3 +333,13 @@ knitr::kable(indicadores,
 
 ```
 
+```{r}
+#Filtramos la data para quitar las filas o peliculas que no tienen calificación de Meta_Score:
+
+df.dep <- df %>% filter(!is.na(Meta_score))
+
+df.dep <- df.dep %>% select(-Certificate) 
+
+
+```
+
