@@ -1,5 +1,5 @@
 ---
-title: "Avance 2: exploración y preparación de datos"
+title: "Grupo_1_HerramientasDatosI_2026"
 subtitle: "Proyecto grupal CA0204 — Cine en datos"
 
 author: |-
@@ -326,6 +326,51 @@ knitr::kable(indicadores,
 
 ```
 
+
+Se analizan varios factores que podrían determinar la popularidad o afectar su calificación.
+Iniciamos analizando la duración y cuales promedios tienen una calificación más alta.
+```{r}
+duracion_calificacion <- df.original %>%
+  mutate(
+    Runtime = readr::parse_number(Runtime),
+    Rango_duracion = cut(
+      Runtime,
+      breaks = c(-Inf, 90, 120, 150, 180, Inf),
+      labels = c(
+        "Menos de 90 min",
+        "90-119 min",
+        "120-149 min",
+        "150-179 min",
+        "180 min o más"
+      ),
+      right = FALSE
+    )
+  ) %>%
+  group_by(Rango_duracion) %>%
+  summarise(
+    Cantidad_peliculas = n(),
+    Calificacion_promedio = mean(IMDB_Rating, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+Dicho análisis se ve en este cuadro
+```{r}
+indicadores.duracion <- tibble(
+  Rango = duracion_calificacion$Rango_duracion,
+  Cantidad = duracion_calificacion$Cantidad_peliculas,
+  Calificacion_promedio = duracion_calificacion$Calificacion_promedio
+) %>%
+  mutate(
+    Calificacion_promedio = round(Calificacion_promedio, 2)
+  )
+
+knitr::kable(
+  head(indicadores.duracion, 5),
+  caption = "Calificación promedio según rango de duración"
+)
+```
+como se puede observar, las películas con una duración de dos horas y media o superior (150 minutos o más) tienden a tener una calificación superior.
 <<<<<<< HEAD
 ```{r}
 #Filtramos la data para quitar las filas o peliculas que no tienen calificación de Meta_Score:
