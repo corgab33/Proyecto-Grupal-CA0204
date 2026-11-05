@@ -44,16 +44,9 @@ Este dataset incluye las 1000 mejores peliculas de la historia, a nivel global; 
 
 ## Objetivo general
 
-<!-- Pendiente: dejar un solo objetivo claro y alcanzable (2 a 4 líneas). -->
+<!-- CORREGIDO: dejar un solo objetivo claro y alcanzable (2 a 4 líneas). -->
 
-El objetivo del presente trabajo es analizar el conjunto de datos de
-las 1000 películas mejor calificadas en IMDb, para observar que
-características se relacionan con calificaciones positivas de parte
-del público, las críticas especializadas, y el éxito en general. La
-pregunta central es: ¿Qué hace que una película sea un éxito en
-taquilla, sea amada por el público y al mismo tiempo alabada por la
-crítica?. Para responder tal preguntá se buscará construir una "fórmula
-ganadora" que exponga las principales conclusiones del proyecto.
+Identificar qué características de las películas (género, duración, década de lanzamiento, etc.) se asocian con el asociaciones en el éxito en la calificación del público, la valoración de la crítica y la taquilla, mediante un análisis descriptivo y de correlación de las 1000 películas mejor calificadas en IMDb.
 
 ## Metodología
 
@@ -133,8 +126,8 @@ df <- df %>%
          Released_Year = as.integer(Released_Year)
          )
 
-df$Released_Year[which(is.na(df$Released_Year))] <- 1985
-#Dato extraído de internet 
+df$Released_Year[which(is.na(df$Released_Year))] <- 1995
+#Dato extraído de internet IMDb
 
 
 ```
@@ -248,7 +241,7 @@ knitr::kable(
 *Nota: Una misma película puede pertenecer a más de un género, por lo que puede ser contabilizada en varias categorías.*
 </span>
 
-#### Directores con mayor lanzamiento de películas
+#### Directores con mayor lanzamiento de películas en el conjunto estudiado
 
 ```{r}
 #| echo: false
@@ -279,7 +272,7 @@ df.original %>%
       "Película", "Año", "Género",
       "Calificación IMDb", "Metascore"
     ),
-    caption = "Muestra de ocho películas del conjunto de datos."
+    caption = "Muestra de cinco películas del conjunto de datos."
   )
 
 # df.original %>% glimpse()
@@ -333,7 +326,7 @@ Exploramos algunos de los promedios de calificaciones entre el público y la cr�
 ``` {r}
 
 indicadores <- tibble(
-  Indicador = c("Promedio IMBD",
+  Indicador = c("Promedio IMBb",
                 "Promedio Metascore",
                 "Correlacion IMDB vs Metascore",
                 "Promedio de duración (en horas)",
@@ -394,8 +387,9 @@ knitr::kable(
 ```
 
 Como se puede observar, las películas con una duración de dos horas y
-media o superior (150 minutos o más) tienden a tener una calificación
-superior.
+media o superior (150 minutos o más) parecen tener una calificación
+superior en promedio. Sin embargo, hay que tomar en cuenta las diferencias de tamaño
+en los grupos.
 
 El protagonista de una película y quién dirige tal película,
 constituyen partes importantes de la fórmula ganadora. Por tal razón,
@@ -404,7 +398,10 @@ calificación en IMDb, su director y protagonista. Específicamente, se
 consideran los actores protagonistas y directores cuyas películas en
 promedio generan las calificaciones más altas o los mayores
 ingresos. En este caso, *promedio*, se refiere a la media bayesiana
-con una parámetro de confianza de $k = 4$, esto para contemplar los
+con una parámetro de confianza de $k = 4$. Este promedio
+determina el peso del promedio general, es decir, entre más pequeño
+sea el grupo analizado, más se ve afectado por
+el promedio general. Esto para contemplar los
 promedios artificialmente altos debido una pequeña cantidad de
 películas asociadas.
 
@@ -424,8 +421,8 @@ df.actors.directors <- df.original |>
 global.mean.rating <- mean(df.actors.directors$rating)
 global.mean.revenue <- mean(df.actors.directors$revenue)
 
-# Se considera que cuatro películas son suficientes para confiar en el
-# promedio de cada actor.
+# Se considera que cuatro películas son suficientes para corregir el
+# promedio posiblemente inflado de cada actor.
 trust.parameter <- 4
 
 bayesian.mean <- function(n, group.mean, global.mean) {
@@ -443,7 +440,7 @@ actors.grouping <- df.actors.directors |>
         mean.revenue = bayesian.mean(n, group.mean.revenue, global.mean.revenue),
         .by = "protagonist"
     ) |>
-    select(protagonist, mean.rating, mean.revenue)
+    select(protagonist, n, mean.rating, mean.revenue)
 
 # Agrupación por director
 
@@ -456,7 +453,7 @@ directors.grouping <- df.actors.directors |>
         mean.revenue = bayesian.mean(n, group.mean.revenue, global.mean.revenue),
         .by = "director"
     ) |>
-    select(director, mean.rating, mean.revenue)
+    select(director, n, mean.rating, mean.revenue)
 
 ```
 
@@ -464,65 +461,66 @@ directors.grouping <- df.actors.directors |>
 
 # Tabla de protagonistas por calificación
 actors.grouping |>
-    select(protagonist, mean.rating) |>
+    select(protagonist, n, mean.rating) |>
     arrange(desc(mean.rating)) |>
     head(3) |>
     kable(
-        col.names = c("Protagonista", "Calificación IMDb Promedio"),
+        col.names = c("Protagonista", "Películas", "IMDb Promedio Ajustado"),
         caption = "Los tres protagonistas con mayor calificación promedio en IMDb"
     )
 
 # Tabla de protagonistas por ingreso
 actors.grouping |>
-    select(protagonist, mean.revenue) |>
+    select(protagonist, n, mean.revenue) |>
     arrange(desc(mean.revenue)) |>
     head(3) |>
     kable(
-        col.names = c("Protagonista", "Ingresos Generados Promedio"),
+        col.names = c("Protagonista", "Películas","Ingresos Generados Promedio Ajustados"),
         caption = "Los tres protagonistas con mayores ingresos generados en promedio"
     )
 
 ```
 
 Con respecto al protagonista, se observa que en promedio los actores
-Elijah Wood, Tim Robbins y Mark Hamill generan en promedio las mayores
+Elijah Wood, Tim Robbins y Mark Hamill se asocian, en promedio, a las mayores
 calificaciones en la plataforma IMDb. Por otro lado, son Joe Russo,
-Daisy Ridley y Daniel Radcliffe quienes producen en promedio el mayor
+Daisy Ridley y Daniel Radcliffe quienes están asociados en promedio al mayor
 éxito comercial.
 
 ``` {r}
 
 # Tabla de directores por calificación
 directors.grouping |>
-    select(director, mean.rating) |>
+    select(director, n, mean.rating) |>
     arrange(desc(mean.rating)) |>
     head(3) |>
     kable(
-        col.names = c("Director", "Calificación IMDb Promedio"),
+        col.names = c("Director", "Películas","IMDb Promedio Ajustado"),
         caption = "Los tres directores con mayor calificación promedio en IMDb"
     )
 
 # Tabla de directores por ingreso
 directors.grouping |>
-    select(director, mean.revenue) |>
+    select(director, n,mean.revenue) |>
     arrange(desc(mean.revenue)) |>
     head(3) |>
     kable(
-        col.names = c("Director", "Ingresos Generados Promedio"),
+        col.names = c("Director", "Películas", "Ingresos Generados Promedio Ajustados"),
         caption = "Los tres directores con mayores ingresos generados en promedio"
     )
 
 ```
 
 Además, se observa que Christopher Nolan, Frank Darabont y Francis
-Ford Coppola son los directores que en promedio contribuyen a una
+Ford Coppola son los directores que en promedio se asocian a una
 mayor calificación de IMDb. Con respecto al aspecto comercial, Anthony
 Russo, J. J. Abrams y James Cameron son los directores más exitosos en
 promedio.
 
 ## Bibliografía
 
-<!-- Pendiente: referencias en formato APA 7. -->
+<!-- Cita de extraccion de la fecha de apolo -->
+IMDb. (s.f.). Apolo 13 (1995). Recuperado el 5 de noviembre de 2026, de IMDb
 
 ## Anexos
 
