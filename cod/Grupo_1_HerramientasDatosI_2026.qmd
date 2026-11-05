@@ -371,7 +371,6 @@ knitr::kable(
 )
 ```
 Como se puede observar, las películas con una duración de dos horas y media o superior (150 minutos o más) tienden a tener una calificación superior.
-<<<<<<< HEAD
 ```{r}
 #Filtramos la data para quitar las filas o peliculas que no tienen calificación de Meta_Score:
 
@@ -381,6 +380,4 @@ df.dep <- df.dep %>% select(-Certificate)
 
 
 ```
-=======
->>>>>>> ca41ef840c1104ccfdb4f181d1de74c8aad3e2ce
 
