@@ -46,7 +46,7 @@ Este dataset incluye las 1000 mejores peliculas de la historia, a nivel global; 
 
 <!-- CORREGIDO: dejar un solo objetivo claro y alcanzable (2 a 4 líneas). -->
 
-Identificar qué características de las películas (género, duración, década de lanzamiento, etc.) se asocian con el asociaciones en el éxito en la calificación del público, la valoración de la crítica y la taquilla, mediante un análisis descriptivo y de correlación de las 1000 películas mejor calificadas en IMDb.
+Identificar qué características de las películas (género, duración, década de lanzamiento, etc.) se asocian con el éxito en la calificación del público, la valoración de la crítica y la taquilla, mediante un análisis descriptivo y de correlación de las 1000 películas mejor calificadas en IMDb.
 
 ## Metodología
 
