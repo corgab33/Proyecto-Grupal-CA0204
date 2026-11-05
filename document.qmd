@@ -70,11 +70,9 @@ Luego, importamos el dataset a partir de un archivo `.csv`, mediante la librerí
 
 ``` {r}
 
-<<<<<<< HEAD
+
 df.original <- read_csv("data/imdb_top_1000.csv")
-=======
-df.original <- read_csv("../data/imdb_top_1000.csv")
->>>>>>> 2c1ebc092468f268bcb2258d79d763697af364b3
+
 
 ```
 
@@ -257,7 +255,6 @@ df <- df %>%
     mutate(IMDB_Rating = as.numeric(IMDB_Rating), 
          Meta_score = as.integer(Meta_score),
          Runtime = as.integer(gsub(" min", "", Runtime)),
-<<<<<<< HEAD
          Gross = as.integer(gsub(",", "", Gross)),
          Released_Year = as.integer(Released_Year)
          )
@@ -265,11 +262,7 @@ df <- df %>%
 df$Released_Year[which(is.na(df$Released_Year))] <- 1985
 #Dato extraído de internet 
 
-=======
-         Gross = as.integer(gsub(",", "", Gross))
-         )
 
->>>>>>> 2c1ebc092468f268bcb2258d79d763697af364b3
 ```
 
 ## Una Primera Exploración de los Datos
