@@ -1,13 +1,16 @@
-#Cremos data filtrada sin las peliculas NA en Meta_score, quitando columnas innecesarias:
+
+#Cremos data filtrada sin las peliculas NA en Meta_score, 
+#quitando columnas innecesarias:
+
 peliculas <- df %>%
   filter(!is.na(Meta_score)) %>% 
   select(-Certificate) 
 
-#Análisis de Trama o sinopsis: ----
-
 peliculas <- peliculas %>%
   mutate(Overview = tolower(Overview)) %>% 
   select(-starts_with("Star"), -Director, -Runtime)
+
+#Análisis de sinopsis: ----
 
 
 #Creamos dataframe agregando la columna word con palabras relevantes, eliminando
@@ -41,16 +44,17 @@ pares.frecuentes <- Trama.words %>%
   ) %>% 
   filter(n >= 5, item1 < item2)
 
+
 #Filtrar data de la trama por frecuencia de aparición si la palabra aparece en 
-#10 peliculas o más:
+#diez peliculas o más:
 
 Trama.filtrado <- Trama.words %>%
   semi_join(frecuencias,
             by = "word")
 
-#Calculamos la correlación entre pares, si una palabra aparece en una película, 
-#¿Qué tan probable es que la otra también aparezca?
-#Mide la fuerza de asociación entre dos palabras.
+#Calcula correlación entre pares, si una palabra aparece en una película, 
+#¿Qué tan probable es que la otra también aparezca? Mide fuerza de asociación 
+#entre dos palabras.
 
 corr.pares <- Trama.filtrado %>%
   pairwise_cor(
@@ -117,11 +121,10 @@ analizar.par <- function(data, palabra1, palabra2){
   
 }
 
-##Tramas populares o frecuentes: ----
+##Resultados análisis sinópsis: ----
 
-#Almacena resumen estadistico de las peliculas filtradas
-#por los pares de palabras que aparecen con frecuencia 
-#en las sinopsis:
+#Almacena resumen estadistico de las peliculas filtradas por los pares de 
+#palabras que aparecen con frecuencia en las sinopsis:
 
 resultados.par <- Top.corr.pares %>%
   rowwise() %>%
@@ -144,9 +147,8 @@ resultados.par <- Top.corr.pares %>%
 Top.palabra <- frecuencias %>% head(20) %>%
   filter(!word %in% c("life", "story", "lives", "time", "world"))
 
-#Almacena resumen estadistico de las peliculas filtradas
-#por palabras (únicas) que aparecen con frecuencia 
-#en las sinópsis:
+#Almacena resumen estadistico de las peliculas filtradas por palabras (únicas) 
+#que aparecen con frecuencia en las sinópsis:
 resultados.palabra <- Top.palabra  %>%
   rowwise() %>%
   mutate(
@@ -162,7 +164,7 @@ resultados.palabra <- Top.palabra  %>%
   arrange(desc(peliculas))
 
 
-#Análisis x género: ----
+#Análisis de género: ----
 
 generos <- strsplit(
   as.character(peliculas$Genre),
@@ -254,7 +256,7 @@ analizar.genero <- function(data, genero){
   
 }
 
-##Resultados análisis x género: ----
+##Resultados análisis de género: ----
 resultados.generos <- tibble(
   genero = generos$Genre
 ) %>%
@@ -270,9 +272,9 @@ resultados.generos <- tibble(
   tidyr::unnest(analisis) %>% 
   arrange(desc(diferencia.critica))
 
-##Intersección de géneros: ----
 
-###Resultado estadísto de intersecciones de géneros en peliculas: ----
+
+##Resultado estadísto de intersecciones de géneros: ----
 
 res.interseccion.gen <- tibble(
   genero = peliculas$Genre
