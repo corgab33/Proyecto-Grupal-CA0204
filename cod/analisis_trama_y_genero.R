@@ -160,3 +160,18 @@ resultados.palabra <- Top.palabra  %>%
   tidyr::unnest(analisis) %>% 
   filter(peliculas >= 5) %>% 
   arrange(desc(peliculas))
+
+
+#Análisis x género:
+
+generos <- strsplit(
+  as.character(peliculas$Genre),
+  ", "
+)
+
+generos <- unlist(generos)
+
+generos <- data.frame(Genre = generos) %>%
+  filter(!is.na(Genre), Genre != "") %>%
+  count(Genre, sort = TRUE) 
+
