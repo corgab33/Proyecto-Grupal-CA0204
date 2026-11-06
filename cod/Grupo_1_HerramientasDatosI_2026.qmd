@@ -524,7 +524,7 @@ source("02_analisis_trama_y_genero.R")
 
 ```
 
-En cuánto al análisis de trama se encontraron resultados interesentes. Para los pares de palabras que conjuntamente son más frecuentes, se pueden observar algunos patrones narrativos como: historias desarolladas durante las guerras mundiales, siendo más frecuentes narrativas ambientadas en la segunda; relatos de relaciones paternofiliales; narrativas que exploran encontrar el amor; historias basadas en la realidad, tipo biograficas; relacionadas con el crimen o la justicia, cómo acusaciones de homicidios e historias de índole detective investiga crimen o de agentes secretos. Cabe recalcar que estas relaciones solo analizan pares de palabras que son probables de ir juntas (ver Anexos tabla: "") en diferentes peliculas y que independientemente no representan una cantidad significativa de las peliculas del dataset.
+En cuánto al análisis de trama se encontraron resultados interesentes. Para los pares de palabras que conjuntamente son más frecuentes, se pueden observar algunos patrones narrativos como: historias desarolladas durante las guerras mundiales, siendo más frecuentes narrativas ambientadas en la segunda; relatos de relaciones paternofiliales; narrativas que exploran encontrar el amor; historias basadas en la realidad, tipo biograficas; relacionadas con el crimen o la justicia, cómo acusaciones de homicidios e historias de índole detective investiga crimen o de agentes secretos. Cabe recalcar que estas relaciones solo analizan pares de palabras que son probables de ir juntas en diferentes peliculas y que independientemente no representan una cantidad significativa de las peliculas del dataset.
 
 ```{r}
 pares.seleccionados <- tribble(
