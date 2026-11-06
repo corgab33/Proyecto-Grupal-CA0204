@@ -175,3 +175,83 @@ generos <- data.frame(Genre = generos) %>%
   filter(!is.na(Genre), Genre != "") %>%
   count(Genre, sort = TRUE) 
 
+
+##Funciones analizar genero: ----
+analizar.genero.unico <- function(data, genero){
+  
+  patron = paste0(
+    "^",
+    genero,
+    "$"
+  )
+  
+  peliculas.genero <- data %>%
+    filter(
+      str_detect(
+        Genre,
+        patron
+      )
+    )
+  
+  tibble(
+    peliculas = nrow(peliculas.genero),
+    porcentaje = round(
+      100 * nrow(peliculas.genero) / nrow(data),
+      2
+    ),
+    imdb = mean(
+      peliculas.genero$IMDB_Rating,
+      na.rm = TRUE
+    ),
+    meta = mean(
+      peliculas.genero$Meta_score,
+      na.rm = TRUE
+    ),
+    diferencia.critica = mean(peliculas.genero$IMDB_Rating, na.rm = TRUE) -
+      mean(peliculas.genero$Meta_score/10, na.rm = TRUE),
+    votos = mean(
+      peliculas.genero$No_of_Votes,
+      na.rm = TRUE
+    ),
+    taquilla = mean(peliculas.genero$Gross, na.rm = T)
+  )
+  
+}
+
+analizar.genero <- function(data, genero){
+  
+  
+  peliculas.genero <- data %>%
+    filter(
+      str_detect(
+        Genre,
+        fixed(genero)
+      )
+    )
+  
+  tibble(
+    peliculas = nrow(peliculas.genero),
+    porcentaje = round(
+      100 * nrow(peliculas.genero) / nrow(data),
+      2
+    ),
+    imdb = mean(
+      peliculas.genero$IMDB_Rating,
+      na.rm = TRUE
+    ),
+    meta = mean(
+      peliculas.genero$Meta_score,
+      na.rm = TRUE
+    ),
+    diferencia.critica = mean(peliculas.genero$IMDB_Rating, na.rm = TRUE) -
+      mean(peliculas.genero$Meta_score/10, na.rm = TRUE),
+    votos = mean(
+      peliculas.genero$No_of_Votes,
+      na.rm = TRUE
+    ),
+    taquilla = mean(peliculas.genero$Gross, na.rm = T)
+  )
+  
+}
+
+
