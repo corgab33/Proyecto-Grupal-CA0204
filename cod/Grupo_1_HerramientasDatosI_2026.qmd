@@ -600,6 +600,51 @@ Top.corr.pares <- corr.pares %>%
          item2 != "york")
 ```
 
+```{r}
+#Funciones análisis de trama: 
+
+#Funcion crea un tibble con informacion estadistica de las peliculas filtradas
+#por una palabra relevante en la trama:
+
+analizar.palabra <- function(data, palabra){
+  
+  plot <- data %>%
+    filter(
+      str_detect(
+        Overview,
+        fixed(palabra)
+      )
+    )
+  
+  tibble(
+    peliculas = nrow(plot),
+    porcentaje = round(100 * nrow(plot) / nrow(data), 1),
+    imdb = mean(plot$IMDB_Rating, na.rm = TRUE),
+    meta = mean(plot$Meta_score, na.rm = TRUE)
+  )
+  
+}
+
+#Funcion crea un tibble con informacion estadistica de las peliculas filtradas
+#por par de palabras relevantes en la trama:
+analizar.par <- function(data, palabra1, palabra2){
+  
+  plot <- data %>%
+    filter(
+      str_detect(Overview, fixed(palabra1)),
+      str_detect(Overview, fixed(palabra2))
+    )
+  
+  tibble(
+    peliculas = nrow(plot),
+    porcentaje = round(100 * nrow(plot) / nrow(data), 1),
+    imdb = mean(plot$IMDB_Rating, na.rm = TRUE),
+    meta = mean(plot$Meta_score, na.rm = TRUE)
+  )
+  
+}
+```
+
 
 ## Bibliografía
 
