@@ -524,7 +524,45 @@ source("02_analisis_trama_y_genero.R")
 
 ```
 
-En cuánto al análisis de trama se encontraron resultados interesentes. Para los pares de palabras que conjuntamente son más frecuentes, se pueden observar algunos patrones narrativos como: historias desarolladas durante las guerras mundiales, siendo más frecuentes narrativas ambientadas en la segunda; relatos de relaciones paternofiliales; narrativas que exploran encontrar el amor; historias basadas en la realidad, tipo biograficas; relacionadas con el crimen o la justicia, cómo acusaciones de homicidios; historias narradas o de tipo **story telling** e historias de índole detective investiga crimen o de agentes secretos. Cabe recalcar que estas relaciones solo analizan pares de palabras que son probables de ir juntas (ver Anexos tabla: "") en diferentes peliculas y que independientemente no representan una cantidad significativa de las peliculas del dataset.
+En cuánto al análisis de trama se encontraron resultados interesentes. Para los pares de palabras que conjuntamente son más frecuentes, se pueden observar algunos patrones narrativos como: historias desarolladas durante las guerras mundiales, siendo más frecuentes narrativas ambientadas en la segunda; relatos de relaciones paternofiliales; narrativas que exploran encontrar el amor; historias basadas en la realidad, tipo biograficas; relacionadas con el crimen o la justicia, cómo acusaciones de homicidios e historias de índole detective investiga crimen o de agentes secretos. Cabe recalcar que estas relaciones solo analizan pares de palabras que son probables de ir juntas (ver Anexos tabla: "") en diferentes peliculas y que independientemente no representan una cantidad significativa de las peliculas del dataset.
+
+```{r}
+pares.seleccionados <- tribble(
+  ~item1, ~item2,
+  "war", "world",
+  "father", "son",
+  "falls", "love",
+  "accused", "murder",
+  "detective", "murder",
+  "agent", "secret"
+)
+
+resultados.par %>%
+  inner_join(
+    pares.seleccionados,
+    by = c("item1", "item2")
+  ) %>%
+  mutate(
+    `Par de palabras` = paste(item1, "+", item2),
+    Correlación = round(correlation, 3),
+    `% Películas` = round(porcentaje, 1),
+    IMDb = round(imdb, 2),
+    MetaScore = round(meta, 2)
+  ) %>%
+  select(
+    `Par de palabras`,
+    Correlación,
+    Películas = peliculas,
+    `% Películas`,
+    IMDb,
+    MetaScore
+  ) %>%
+  kable(
+    caption = "Patrones narrativos seleccionados a partir de correlaciones entre palabras",
+    align = "lrrrrr"
+  )
+```
+
 
 Por otro lado las palabras (únicas) más frecuentes, filtradas por relevancia, apoyan los resultados de los pares en el apartado de historias de guerra, cuya palabra por si sola se encuentra en $10.4%$ de las peliculas del dataset. Otras palabras con peso incluyen relaciones interpersonales cómo **friends** o de familia cómo: **son, family, father**; y de individuos **woman, boy, girl**. De nuevo hace falta mencionar que los resultados son limitados pues las palabras por si solas no revelan una narrativa, por lo que las interpretaciones pueden resultar especulativas y sesgadas, además que no pertenecen a una cantidad significativa de peliculas e incluso pueden aparecer juntas por lo que los porcentajes no son aditivos.
 
@@ -575,3 +613,8 @@ IMDb. (s.f.). Apolo 13 (1995). Recuperado el 5 de noviembre de 2026, de IMDb
 Repositorio del proyecto: <https://github.com/corgab33/Proyecto-Grupal-CA0204>
 
 <!-- Pendiente: gráficos o tablas de alto valor, sin código. -->
+
+```{r}
+
+```
+
