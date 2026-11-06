@@ -4,11 +4,8 @@
 
 peliculas <- df %>%
   filter(!is.na(Meta_score)) %>% 
-  select(-Certificate) 
-
-peliculas <- peliculas %>%
-  mutate(Overview = tolower(Overview)) %>% 
-  select(-starts_with("Star"), -Director, -Runtime)
+  select(-Certificate, -starts_with("Star"), -Director, -Runtime) %>%
+  mutate(Overview = tolower(Overview)) 
 
 #Análisis de sinopsis: ----
 
@@ -67,7 +64,8 @@ corr.pares <- Trama.filtrado %>%
   rename(freq.1 = n) %>%
   left_join(frecuencias,
             by = c("item2" = "word")) %>%
-  rename(freq.2 = n) %>% filter(correlation >= 0)
+  rename(freq.2 = n) %>% 
+  filter(correlation >= 0)
 
 
 Top.corr.pares <- corr.pares %>% 
@@ -127,9 +125,8 @@ resultados.palabra <- Top.palabra  %>%
 generos <- strsplit(
   as.character(peliculas$Genre),
   ", "
-)
-
-generos <- unlist(generos)
+) %>% 
+unlist()
 
 generos <- data.frame(Genre = generos) %>%
   filter(!is.na(Genre), Genre != "") %>%
@@ -156,7 +153,7 @@ resultados.generos <- tibble(
 
 ##Resultado estadísto de intersecciones de géneros: ----
 
-res.interseccion.gen <- tibble(
+res.interseccion <- tibble(
   genero = peliculas$Genre
 ) %>%
   rowwise() %>%
