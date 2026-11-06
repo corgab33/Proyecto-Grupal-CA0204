@@ -29,31 +29,47 @@ execute:
   echo: false
   warning: false
   message: false
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ## Introducción
 
 <!-- Pendiente: completar contexto, relevancia (máx. 1 página). -->
 
-El dataset que se plantea usar en el proyecto es el siguiente: [Top 1000 IMDB movies](https://doi.org/10.34740/kaggle/dsv/3954453).
+El dataset que se plantea usar en el proyecto es el siguiente: [Top 1000
+IMDB movies](https://doi.org/10.34740/kaggle/dsv/3954453).
 
-Extraído de la base de datasets de la página web [Kaggle](https://www.kaggle.com/datasets).
-Los datos se recopilaron a través del método *web scraping* desde la página web oficial pública de IMDbd usando *Selenium*; una herramienta de código abierto que sirve para entre otras cosas, la extracción de datos en navegadores web.
+Extraído de la base de datasets de la página web
+[Kaggle](https://www.kaggle.com/datasets). Los datos se recopilaron a
+través del método *web scraping* desde la página web oficial pública de
+IMDbd usando *Selenium*; una herramienta de código abierto que sirve
+para entre otras cosas, la extracción de datos en navegadores web.
 
-Este dataset incluye las 1000 mejores peliculas de la historia, a nivel global; usando como periodo de cobertura desde el año 1975 hasta 2022 (última actualización), según la página dedicada al cine y la televisión IMDb (Internet Movie Database), donde se incluye entre otras cosas sinopsis de peliculas, teasers, recomendaciones, reseñas y calificaciones tanto del público *(IMDb rating)* como de la crítica especializada *(Meta score)*.
+Este dataset incluye las 1000 mejores peliculas de la historia, a nivel
+global; usando como periodo de cobertura desde el año 1975 hasta 2022
+(última actualización), según la página dedicada al cine y la televisión
+IMDb (Internet Movie Database), donde se incluye entre otras cosas
+sinopsis de peliculas, teasers, recomendaciones, reseñas y
+calificaciones tanto del público *(IMDb rating)* como de la crítica
+especializada *(Meta score)*.
 
 ## Objetivo general
 
-
-Identificar qué características de las películas (género, duración, década de lanzamiento, etc.) se asocian con el éxito en la calificación del público, la valoración de la crítica y la taquilla, mediante un análisis descriptivo y de correlación de las 1000 películas mejor calificadas en IMDb.
+Identificar qué características de las películas (género, duración,
+década de lanzamiento, etc.) se asocian con el éxito en la calificación
+del público, la valoración de la crítica y la taquilla, mediante un
+análisis descriptivo y de correlación de las 1000 películas mejor
+calificadas en IMDb.
 
 ## Metodología
 
 ### Datos
 
 Primero, se importan las librerías necesarias. En este caso, `readr`
-para la lectura de los datos y `magrittr, dplyr` para la manipulación
-de estos.
+para la lectura de los datos y `magrittr, dplyr` para la manipulación de
+estos.
 
 ```{r}
 library(readr)
@@ -75,9 +91,10 @@ source("01_funciones_auxiliares.R")
 
 ```
 
-Luego, importamos el dataset a partir de un archivo `.csv`, mediante la librería `readr`
+Luego, importamos el dataset a partir de un archivo `.csv`, mediante la
+librería `readr`
 
-``` {r}
+```{r}
 
 
 df.original <- read_csv("../data/imdb_top_1000.csv")
@@ -85,20 +102,26 @@ df.original <- read_csv("../data/imdb_top_1000.csv")
 
 ```
 
-El `dataframe` contiene diferentes características de las películas, muestra un link al poster, el título, año de lanzamiento, certificado de contenidos (clasificación por edades), duración, géneros, calificación IMDb (de 0 a 10), descripción, puntuación por críticas (de 0 a 100), director, actores/actrices principales, número de votos e ingresos brutos. Información encontrada mediante la función `df.original %>% glimpse()` y traducido por el equipo
+El `dataframe` contiene diferentes características de las películas,
+muestra un link al poster, el título, año de lanzamiento, certificado de
+contenidos (clasificación por edades), duración, géneros, calificación
+IMDb (de 0 a 10), descripción, puntuación por críticas (de 0 a 100),
+director, actores/actrices principales, número de votos e ingresos
+brutos. Información encontrada mediante la función
+`df.original %>% glimpse()` y traducido por el equipo
 
 ### Limpieza y preparación
 
-Luego, se genera y modifica otro `dataframe` a partir de
-`df.original`, con el fin de facilitar nuestro análisis.
+Luego, se genera y modifica otro `dataframe` a partir de `df.original`,
+con el fin de facilitar nuestro análisis.
 
 **1. Se elimina la columna `poster`**
 
-La variable `Poster_Link` contiene únicamente el enlace a la imagen del póster
-de cada película. Por  lo que no aporta un valor cuantitativo o categórico relevante
-para los análisis planteados en este avance
+La variable `Poster_Link` contiene únicamente el enlace a la imagen del
+póster de cada película. Por lo que no aporta un valor cuantitativo o
+categórico relevante para los análisis planteados en este avance
 
-``` {r}
+```{r}
 
 df <- df.original %>% 
     select(-Poster_Link)
@@ -107,10 +130,13 @@ df <- df.original %>%
 
 **2. Se crea una columna `id` según el rating**
 
-Se agrega una variable `id` con valores consecutivos para identificar de manera
-única cada fila del `dataframe`. Se presenta de mayor a menor calificación IMDb. De esta forma, el `id` permite ubicar y referenciar con mayor facilidad cada observación durante la manipulación de los datos. 
+Se agrega una variable `id` con valores consecutivos para identificar de
+manera única cada fila del `dataframe`. Se presenta de mayor a menor
+calificación IMDb. De esta forma, el `id` permite ubicar y referenciar
+con mayor facilidad cada observación durante la manipulación de los
+datos.
 
-``` {r}
+```{r}
 
 df <- df %>% 
     mutate(id = 1:dim(df)[1]) %>% 
@@ -120,12 +146,15 @@ df <- df %>%
 
 **3. Se ajustan las clases de datos**
 
-Las variables `IMDB_Rating`, `Meta_score`, `Runtime` y `Gross`  representan datos numéricos y
-serán utilizadas posteriormente para realizar operaciones estadísticas, como
-promedios y correlaciones. Por ello, se convierten explícitamente a clase de
-datos `numeric` para el rating y no perder decimales e `integer` para los demás, pues no contienen decimales y se ahorra espacio en la memoria, con el fin de garantizar que R las reconozca como variables cuantitativas.
+Las variables `IMDB_Rating`, `Meta_score`, `Runtime` y `Gross`
+representan datos numéricos y serán utilizadas posteriormente para
+realizar operaciones estadísticas, como promedios y correlaciones. Por
+ello, se convierten explícitamente a clase de datos `numeric` para el
+rating y no perder decimales e `integer` para los demás, pues no
+contienen decimales y se ahorra espacio en la memoria, con el fin de
+garantizar que R las reconozca como variables cuantitativas.
 
-``` {r}
+```{r}
 
 df <- df %>% 
     mutate(IMDB_Rating = as.numeric(IMDB_Rating), 
@@ -151,7 +180,10 @@ df$Released_Year[which(is.na(df$Released_Year))] <- 1995
 
 ### Análisis exploratorio
 
-Para empezar, se muestran las características principales del `dataframe` orginal, señalando la totalidad de películas, registros, cantidad de variables, distribución de géneros y directores y un rango en años de lanzamiento
+Para empezar, se muestran las características principales del
+`dataframe` orginal, señalando la totalidad de películas, registros,
+cantidad de variables, distribución de géneros y directores y un rango
+en años de lanzamiento
 
 ```{r}
 #| echo: false
@@ -213,7 +245,7 @@ data.frame(
   )
 ```
 
-#### Géneros más comunes 
+#### Géneros más comunes
 
 ```{r}
 #| echo: false
@@ -236,9 +268,10 @@ knitr::kable(
   caption = "Número de películas pertenecientes a cada género."
 )
 ```
-<span style="font-size: 0.8em;">
-*Nota: Una misma película puede pertenecer a más de un género, por lo que puede ser contabilizada en varias categorías.*
-</span>
+
+[ *Nota: Una misma película puede pertenecer a más de un género, por lo
+que puede ser contabilizada en varias categorías.*
+]{style="font-size: 0.8em;"}
 
 #### Directores con mayor lanzamiento de películas en el conjunto estudiado
 
@@ -257,11 +290,11 @@ knitr::kable(
 )
 ```
 
-Seguidamente, se inspecciona el `dataframe` brevemente, mostrando
-una selección de datos de las primeras 5 filas y un resumen de los
+Seguidamente, se inspecciona el `dataframe` brevemente, mostrando una
+selección de datos de las primeras 5 filas y un resumen de los
 contenidos y sus calificaciones.
 
-``` {r}
+```{r}
 
 df.original %>%
   select(Series_Title, Released_Year, Genre, IMDB_Rating, Meta_score) %>%
@@ -278,13 +311,15 @@ df.original %>%
 
 ```
 
-<span style="font-size: 0.8em;">
-*Nota: la tabla anterior no representa el total de las variables del dataset debido al tamaño se optó por mostrar solo las cinco principales columnas. Las otras variables incluyen datos como: el director, las principales estrellas, taquilla, la descripción, duración, certificación, etc.*
-</span>
+[ *Nota: la tabla anterior no representa el total de las variables del
+dataset debido al tamaño se optó por mostrar solo las cinco principales
+columnas. Las otras variables incluyen datos como: el director, las
+principales estrellas, taquilla, la descripción, duración,
+certificación, etc.* ]{style="font-size: 0.8em;"}
 
 Cantidad de observaciones `NA` por cada columna de `df`.
 
-``` {r}
+```{r}
 
 na.columnas <- df %>% 
                 is.na() %>% 
@@ -305,7 +340,7 @@ knitr::kable(na.columnas,
 
 ```
 
-``` {r}
+```{r}
 
 correlacion <- cor(df$IMDB_Rating,df$Meta_score, use = "complete.obs")
 
@@ -320,9 +355,11 @@ promedio.taquilla <- mean(df$Gross, na.rm = TRUE)/1e6
 
 ```
 
-Exploramos algunos de los promedios de calificaciones entre el público y la crítica, así cómo su correlación. Además incluimos los promedios de duración y de taquilla:
+Exploramos algunos de los promedios de calificaciones entre el público y
+la crítica, así cómo su correlación. Además incluimos los promedios de
+duración y de taquilla:
 
-``` {r}
+```{r}
 
 indicadores <- tibble(
   Indicador = c("Promedio IMBb",
@@ -341,8 +378,10 @@ knitr::kable(indicadores,
 
 ### Resultados de la metodología
 
-Se analizan varios factores que podrían determinar la popularidad o afectar su calificación.
-Iniciamos analizando la duración y cuales promedios tienen una calificación más alta.
+Se analizan varios factores que podrían determinar la popularidad o
+afectar su calificación. Iniciamos analizando la duración y cuales
+promedios tienen una calificación más alta.
+
 ```{r}
 duracion_calificacion <- df.original %>%
   mutate(
@@ -369,6 +408,7 @@ duracion_calificacion <- df.original %>%
 ```
 
 Dicho análisis se ve en este cuadro
+
 ```{r}
 indicadores.duracion <- tibble(
   Rango = duracion_calificacion$Rango_duracion,
@@ -387,24 +427,23 @@ knitr::kable(
 
 Como se puede observar, las películas con una duración de dos horas y
 media o superior (150 minutos o más) parecen tener una calificación
-superior en promedio. Sin embargo, hay que tomar en cuenta las diferencias de tamaño
-en los grupos.
+superior en promedio. Sin embargo, hay que tomar en cuenta las
+diferencias de tamaño en los grupos.
 
-El protagonista de una película y quién dirige tal película,
-constituyen partes importantes de la fórmula ganadora. Por tal razón,
-se analiza la relación entre el ingreso de una película, su
-calificación en IMDb, su director y protagonista. Específicamente, se
-consideran los actores protagonistas y directores cuyas películas en
-promedio generan las calificaciones más altas o los mayores
-ingresos. En este caso, *promedio*, se refiere a la media bayesiana
-con una parámetro de confianza de $k = 4$. Este promedio
-determina el peso del promedio general, es decir, entre más pequeño
-sea el grupo analizado, más se ve afectado por
-el promedio general. Esto para contemplar los
-promedios artificialmente altos debido una pequeña cantidad de
-películas asociadas.
+El protagonista de una película y quién dirige tal película, constituyen
+partes importantes de la fórmula ganadora. Por tal razón, se analiza la
+relación entre el ingreso de una película, su calificación en IMDb, su
+director y protagonista. Específicamente, se consideran los actores
+protagonistas y directores cuyas películas en promedio generan las
+calificaciones más altas o los mayores ingresos. En este caso,
+*promedio*, se refiere a la media bayesiana con una parámetro de
+confianza de $k = 4$. Este promedio determina el peso del promedio
+general, es decir, entre más pequeño sea el grupo analizado, más se ve
+afectado por el promedio general. Esto para contemplar los promedios
+artificialmente altos debido una pequeña cantidad de películas
+asociadas.
 
-``` {r}
+```{r}
 #| echo: false
 
 # Se excluyen filas con rating e ingreso con NA, y solo se seleccionan
@@ -456,7 +495,7 @@ directors.grouping <- df.actors.directors |>
 
 ```
 
-``` {r}
+```{r}
 
 # Tabla de protagonistas por calificación
 actors.grouping |>
@@ -481,12 +520,12 @@ actors.grouping |>
 ```
 
 Con respecto al protagonista, se observa que en promedio los actores
-Elijah Wood, Tim Robbins y Mark Hamill se asocian, en promedio, a las mayores
-calificaciones en la plataforma IMDb. Por otro lado, son Joe Russo,
-Daisy Ridley y Daniel Radcliffe quienes están asociados en promedio al mayor
-éxito comercial.
+Elijah Wood, Tim Robbins y Mark Hamill se asocian, en promedio, a las
+mayores calificaciones en la plataforma IMDb. Por otro lado, son Joe
+Russo, Daisy Ridley y Daniel Radcliffe quienes están asociados en
+promedio al mayor éxito comercial.
 
-``` {r}
+```{r}
 
 # Tabla de directores por calificación
 directors.grouping |>
@@ -510,13 +549,14 @@ directors.grouping |>
 
 ```
 
-Además, se observa que Christopher Nolan, Frank Darabont y Francis
-Ford Coppola son los directores que en promedio se asocian a una
-mayor calificación de IMDb. Con respecto al aspecto comercial, Anthony
-Russo, J. J. Abrams y James Cameron son los directores más exitosos en
+Además, se observa que Christopher Nolan, Frank Darabont y Francis Ford
+Coppola son los directores que en promedio se asocian a una mayor
+calificación de IMDb. Con respecto al aspecto comercial, Anthony Russo,
+J. J. Abrams y James Cameron son los directores más exitosos en
 promedio.
 
-### Trama y género peliculas
+### Trama peliculas
+
 ```{r}
 #Carga documento de análisis de trama y género:
 
@@ -524,7 +564,18 @@ source("02_analisis_trama_y_genero.R")
 
 ```
 
-En cuánto al análisis de trama se encontraron resultados interesentes. Para los pares de palabras que conjuntamente son más frecuentes, se pueden observar algunos patrones narrativos como: historias desarolladas durante las guerras mundiales, siendo más frecuentes narrativas ambientadas en la segunda; relatos de relaciones paternofiliales; narrativas que exploran encontrar el amor; historias basadas en la realidad, tipo biograficas; relacionadas con el crimen o la justicia, cómo acusaciones de homicidios e historias de índole detective investiga crimen o de agentes secretos. Cabe recalcar que estas relaciones solo analizan pares de palabras que son probables de ir juntas en diferentes peliculas y que independientemente no representan una cantidad significativa de las peliculas del dataset.
+En cuánto al análisis de trama se encontraron resultados interesentes.
+Para los pares de palabras que conjuntamente son más frecuentes, se
+pueden observar algunos patrones narrativos como: historias desarolladas
+durante las guerras mundiales, siendo más frecuentes narrativas
+ambientadas en la segunda; relatos de relaciones paternofiliales;
+narrativas que exploran encontrar el amor; historias basadas en la
+realidad, tipo biograficas; relacionadas con el crimen o la justicia,
+cómo acusaciones de homicidios e historias de índole detective investiga
+crimen o de agentes secretos. Cabe recalcar que estas relaciones solo
+analizan pares de palabras que son probables de ir juntas en diferentes
+peliculas y que independientemente no representan una cantidad
+significativa de las peliculas del dataset.
 
 ```{r}
 pares.seleccionados <- tribble(
@@ -563,8 +614,16 @@ resultados.par %>%
   )
 ```
 
-
-Por otro lado las palabras (únicas) más frecuentes, filtradas por relevancia, apoyan los resultados de los pares en el apartado de historias de guerra, cuya palabra por si sola se encuentra en $10.4%$ de las peliculas del dataset. Otras palabras con peso incluyen relaciones interpersonales cómo **friends** o de familia cómo: **son, family, father**; y de individuos **woman, boy, girl**. De nuevo hace falta mencionar que los resultados son limitados pues las palabras por si solas no revelan una narrativa, por lo que las interpretaciones pueden resultar especulativas y sesgadas, además que no pertenecen a una cantidad significativa de peliculas e incluso pueden aparecer juntas por lo que los porcentajes no son aditivos.
+Por otro lado las palabras (únicas) más frecuentes, filtradas por
+relevancia, apoyan los resultados de los pares en el apartado de
+historias de guerra, cuya palabra por si sola se encuentra en $10.4%$ de
+las peliculas del dataset. Otras palabras con peso incluyen relaciones
+interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta
+mencionar que los resultados son limitados pues las palabras por si
+solas no revelan una narrativa, por lo que las interpretaciones pueden
+resultar especulativas y sesgadas, además que no pertenecen a una
+cantidad significativa de peliculas e incluso pueden aparecer juntas por
+lo que los porcentajes no son aditivos.
 
 ```{r}
 #Tabla resultados palabra:
@@ -598,23 +657,78 @@ resultados.palabra %>%
   )
 ```
 
-En cuantó a las conclusiones que podemos realizar de este análisis explorativo, podemos decir que en las tablas reportadas, el público general representado por la calificación imdb muestra tendencia hacia narrativas orientadas a la guerra, particularmente a las referidas con la segunda guerra mundial, e historias de detectives o de encontrar el amor, por otro lado la crítica especializada representada por meta score parece coincidir en que las historias de la segunda guerra mundial promedian mayor puntaje, así como una inclinación por relatos detectivescos o de agentes secretos.
+En cuantó a las conclusiones que podemos realizar de este análisis
+explorativo, podemos decir que en las tablas reportadas, el público
+general representado por la calificación imdb muestra tendencia hacia
+narrativas orientadas a la guerra, particularmente a las referidas con
+la segunda guerra mundial, e historias de detectives o de encontrar el
+amor, por otro lado la crítica especializada representada por meta score
+parece coincidir en que las historias de la segunda guerra mundial
+promedian mayor puntaje, así como una inclinación por relatos
+detectivescos o de agentes secretos.
 
+Dadas las limitaciones, las conclusiones anteriores deben ser tomadas
+con reserva, pues en adición a las problemáticas presentadas, las
+cantidades de peliculas por palabras o palabra suelen variar y no ser
+proporcionales. Sin embargo si tenemos que extraer una narrativa con
+contundencia nos podemos decantar por las alusivas a la segunda guerra
+mundial o más general a la guerra pues son las que reunen mayor cantidad
+en porcentaje, y que a promedian calificaciones destacadas.
 
-Dadas las limitaciones, las conclusiones anteriores deben ser tomadas con reserva, pues en adicióna las problemáticas presentadas, las cantidades de peliculas por palabras o palabra suelen variar y no ser proporcionales. Sin embargo si tenemos que extraer una narrativa con contundencia nos podemos decantar por las alusivas a la segunda guerra mundial o más general a la guerra pues son las que reunen mayor cantidad en porcentaje, junto a promediar calificaciones destacadas. 
+###Género 
+
+En la data encontramos que géneros cómo drama, `Comedy`, `Adventure` y `Crime` son los más ubicuos, con especial enfásis en drama que aparece en más del $71%$ de las peliculas de la lista. Por otro lado géneros cómo `Sport, Musical` y `Film Noir` son los menos frecuentes, con menos del $2%$ de presencia. En cuánto a intersecciones de géneros encontramos que los tres más frecuentes incluyen Drama, Comedy, Drama y Drama, Romance reforzando la idea de Drama cómo género central.
+
+En cuánto a los distintos párametros encontramos que en taquilla las peliculas que promedian más incluyen `Adventure`, `Sci-Fi` y `Action`, mientras que la crítica del público se orienta a peliculas cómo `Film-Noir`, `Western` y `War`, por otra parte la crítica especializada comparte preferencias por el `Film-Noir` y `Western`, además incluyen `Horror` en sus tres mejores calificados.
+
+Para contrastar podemos ver las combinaciones de géneros más presentes, en lo que composiciones cómo `Crime, Drama`, se repiten entre los mejores calificados (meta e imdb), aunque la critica especializada y taquilla elijen en cómun `Animation, Adventure, Comedy` y `Drama, Romance` cómo los géneros de mayor éxito, además los mayores éxitos en taquilla lo recibe el género compuesto por `Accion, Adventure, Sci-Fi`. Asimismo también encontramos que el apartado crítica suele diferir más en los géneros `Action, Adventure, Sci-Fi`,  `Crime, Drama, Thriller` y `Action, Crime, Drama`, la tendencia es que el público valora mejor peliculas con estas características, por lo menos en mayor medida que la parte especializada.
+
+```{r}
+
+res.interseccion %>% 
+  mutate(
+    `% Películas` = round(porcentaje, 1),
+    IMDb = round(imdb, 2),
+    MetaScore = round(meta, 2),
+    `Dif. Crítica` = round(diferencia.critica, 2),
+    taquilla = round(taquilla/ 10e5, 2)
+  ) %>%
+  select(
+    `Combinación de géneros` = genero,
+    Películas = peliculas,
+    `% Películas`,
+    IMDb,
+    MetaScore,
+    `Dif. Crítica`,
+    `Taquilla (mill.$)` = taquilla
+  ) %>%
+  kable(
+    caption = "Combinaciones de géneros más frecuentes en las películas analizadas",
+    align = c("l", "r", "r", "r", "r", "r", "r", "r")
+  )
+
+```
+En cuánto a los alcances del análisis observamos una discrepancia entre los géneros individuales que dominan en los párametros mencionados y la composición que observamos originalmente en el `df.original`, especialmente en el apartado crítica. Esto puede ocurrir por varias razones, en primer lugar los géneros individuales se pueden encontrar en varias categorias de peliculas lo que provoca que géneros como `Drama`, `Comedy`, `Adventure` y `Crime` que acumulan mayor volumen en la lista tengan un promedio más bajo pues abordan una gama amplia y variada de peliculas, en cambio otras con una cantidad menor a 100, tengan un promedio más alto pues la categorias son más específicas. Por otro lado en taquilla no tenemos disparidad pues incluyen géneros blockbusters o peliculas de alto presupuesto que promedian grandes taquillas.
+
+Además de lo anterior, encontramos otra diferencia en cuánto a lo analizado en sinópsis donde vimos que la tématica bélica representaba una de las más habituales y de mayor éxito, mientras que en este apartado no aparecen entre las composiciones más habituales aunque tenga su propia etiqueta `War`. Una explicación plausible es que solo hay 45 peliculas con esta etiqueta en toda la lista lo que representa solo  el $5.34%$ de esta, por lo que es muy poco frecuente, sin embargo esto no implica que el análisis de sinópsis haya sido mal planteado sino que la tématica se materializa en otros géneros cómo `Drama`, `Biography`, `History`, `Thriller`, etc.
+
+Podemos concluir de lo anterior que los géneros individuales pueden distorsionar el análisis por variabilidad en el número de peliculas y que la intersección entre géneros es más confiable pues son proporcionalmente semejantes y que aunque no sea explicíto en la etiqueta, la guerra está presente cómo ambientación o catalizador de las peliculas.
+
 
 ## Bibliografía
 
 <!-- Cita de extraccion de la fecha de apolo -->
-IMDb. (s.f.). Apolo 13 (1995). Recuperado el 5 de noviembre de 2026, de IMDb
+
+IMDb. (s.f.). Apolo 13 (1995). Recuperado el 5 de noviembre de 2026, de
+IMDb
 
 ## Anexos
 
-Repositorio del proyecto: <https://github.com/corgab33/Proyecto-Grupal-CA0204>
+Repositorio del proyecto:
+<https://github.com/corgab33/Proyecto-Grupal-CA0204>
 
 <!-- Pendiente: gráficos o tablas de alto valor, sin código. -->
 
 ```{r}
 
 ```
-
