@@ -60,3 +60,46 @@ grafico.diferencia.critica <- resultados.generos %>%
       face = "bold"
     )
   )
+
+
+#Representitividad por género:
+
+top10 <- resultados.generos %>% 
+  arrange(desc(porcentaje)) %>% 
+  head(10)
+
+
+
+grafico.gen.representativos <- ggplot(
+  top10,
+  aes(
+    x = reorder(genero, porcentaje),
+    y = porcentaje,
+    fill = imdb
+  )
+) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_gradientn(
+    colours = c(
+      "#F7E7CE",
+      "#E6B980",
+      "#C97B63",
+      "#8C3B3B"
+    ),
+    name = "IMDb"
+  ) +
+  labs(
+    title = "Top 10 géneros más representativos",
+    x = NULL,
+    y = "% de películas"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      hjust = 0.5
+    )
+  )
+
+
