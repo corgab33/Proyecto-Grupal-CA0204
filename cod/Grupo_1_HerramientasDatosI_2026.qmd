@@ -86,8 +86,10 @@ library(stringr)
 ```
 
 ```{r}
-#Carga documentos funciones:
+#Carga documentos funciones y gráficos:
 source("01_funciones_auxiliares.R")
+
+source("03_graficos.R")
 
 ```
 
@@ -173,6 +175,8 @@ df$Released_Year[which(is.na(df$Released_Year))] <- 1995
 ### Técnicas y herramientas
 
 <!-- Pendiente: describir cada técnica y cómo responde al objetivo. -->
+
+
 
 ## Resultados
 
@@ -619,6 +623,7 @@ relevancia, apoyan los resultados de los pares en el apartado de
 historias de guerra, cuya palabra por si sola se encuentra en $10.4%$ de
 las peliculas del dataset. Otras palabras con peso incluyen relaciones
 interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta
+
 mencionar que los resultados son limitados pues las palabras por si
 solas no revelan una narrativa, por lo que las interpretaciones pueden
 resultar especulativas y sesgadas, además que no pertenecen a una
@@ -681,7 +686,7 @@ En la data encontramos que géneros cómo drama, `Comedy`, `Adventure` y `Crime`
 
 En cuánto a los distintos párametros encontramos en `resultados.generos` que en taquilla las peliculas que promedian más incluyen `Adventure`, `Sci-Fi` y `Action`, mientras que la crítica del público se orienta a peliculas cómo `Film-Noir`, `Western` y `War`, por otra parte la crítica especializada comparte preferencias por el `Film-Noir` y `Western`, además incluyen `Horror` en sus tres mejores calificados.
 
-Para contrastar podemos ver las combinaciones de géneros más presentes, en lo que composiciones cómo `Crime, Drama`, se repiten entre los mejores calificados (meta e imdb), aunque la crítica especializada y taquilla eligen en cómun `Animation, Adventure, Comedy` y `Drama, Romance` cómo los géneros de mayor éxito, además los mayores éxitos en taquilla lo recibe el género compuesto por `Accion, Adventure, Sci-Fi`. Asimismo también encontramos que el apartado crítica suele diferir más en los géneros `Action, Adventure, Sci-Fi`,  `Crime, Drama, Thriller` y `Action, Crime, Drama`, la tendencia es que el público valora peliculas con estas características, en mayor medida que su contraparte especializada.
+Para contrastar podemos ver las combinaciones en `res.interseccion` de géneros más presentes, en lo que composiciones cómo `Crime, Drama`, se repiten entre los mejores calificados (meta e imdb), aunque la crítica especializada y taquilla eligen en cómun `Animation, Adventure, Comedy` y `Drama, Romance` cómo los géneros de mayor éxito, además los mayores éxitos en taquilla lo recibe el género compuesto por `Accion, Adventure, Sci-Fi`. Asimismo también encontramos que el apartado crítica suele diferir más en los géneros `Action, Adventure, Sci-Fi`,  `Crime, Drama, Thriller` y `Action, Crime, Drama`, la tendencia es que el público valora peliculas con estas características, en mayor medida que su contraparte especializada.
 
 ```{r}
 
@@ -739,14 +744,34 @@ n1 <- ceiling(nrow(tabla.generos)/2)
 tabla1 <- tabla.generos[1:10, ]
 tabla2 <- tabla.generos[11:20, ]
 
-tabla.compacta <- bind_cols(
-  tabla1,
-  tibble( `|` = ""),
-  tabla2
+tabla3 <- tabla.generos[21, ]
+tabla3[2:10, 1] <- c("", "", "", "", "", "", "", "", "")
+tabla3 <- tabla3 %>% mutate(peliculas = as.character(peliculas))
+tabla3[2:10, 2] <- c("", "", "", "", "", "", "", "", "")
+
+tabla.compacta <- tibble(
+  `Genero 1` = tabla1$genero,
+  `Peliculas 1` = tabla1$peliculas,
+  `|` = "",
+  `Genero 2`= tabla2$genero,
+  `Peliculas 2` = tabla2$peliculas,
+  `| ` = "",
+  `Genero 3` = tabla3$genero,
+  `Peliculas 3` = tabla3$peliculas
 )
 
 kable(
   tabla.compacta,
-  caption = "Representatividad de los géneros en la muestra"
+  caption = "Tabla 1: Representatividad de los géneros en peliculas"
 )
 ```
+```{r}
+#Graficos análisis género:
+grafico.gen.representativos
+
+```
+```{r}
+#Grafica diferencia de critica x género:
+grafico.diferencia.critica
+```
+
