@@ -517,6 +517,90 @@ mayor calificación de IMDb. Con respecto al aspecto comercial, Anthony
 Russo, J. J. Abrams y James Cameron son los directores más exitosos en
 promedio.
 
+##Análisis de tramas y género peliculas
+
+```{r}
+#Cremos data filtrada sin las peliculas NA en Meta_score, quitando columnas innecesarias:
+peliculas <- df %>%
+  filter(!is.na(Meta_score)) %>% 
+  select(-Certificate) 
+
+```
+
+```{r}
+#Análisis de Trama o sinopsis: --------------------------------
+
+peliculas <- peliculas %>%
+  mutate(Overview = tolower(Overview)) %>% 
+  select(-starts_with("Star"), -Director, -Runtime)
+
+
+#Creamos dataframe agregando la columna word con palabras relevantes, eliminando
+#stop-words o vacías como conectores y eliminando columnas no relevantes:
+Trama.words <- peliculas %>%
+  unnest_tokens(word, Overview) %>%
+  anti_join(stop_words, by = "word") %>% 
+  select(-c("Released_Year", 
+            "No_of_Votes"))
+
+
+#Total de palabras, las 50 más frecuentes:
+conteo.pal <- Trama.words %>% 
+  count(word, sort = T) %>% head(50)
+
+
+#Calcula frecuencia de palabras en diferentes peliculas cuenta solo una
+#aparicion en la misma pelicula
+#Responde: ¿En cuántas películas aparece esta palabra?
+frecuencias <- Trama.words %>%
+  distinct(Series_Title, word) %>%
+  count(word, sort = T) %>%
+  filter(n >= 10)
+
+#Palabras separadas que aparecen juntas en peliculas distintas:
+pares.frecuentes <- Trama.words %>%
+  pairwise_count(
+    word,
+    Series_Title,
+    sort = TRUE
+  ) %>% 
+  filter(n >= 5, item1 < item2)
+
+#Filtrar data de la trama por frecuencia de aparición si la palabra aparece en 
+#10 peliculas o más:
+
+Trama.filtrado <- Trama.words %>%
+  semi_join(frecuencias,
+            by = "word")
+
+#Calculamos la correlación entre pares, si una palabra aparece en una película, 
+#¿Qué tan probable es que la otra también aparezca?
+#Mide la fuerza de asociación entre dos palabras.
+
+corr.pares <- Trama.filtrado %>%
+  pairwise_cor(
+    word,
+    Series_Title,
+    sort = TRUE
+  ) %>%
+  left_join(frecuencias,
+            by = c("item1" = "word")) %>%
+  rename(freq.1 = n) %>%
+  left_join(frecuencias,
+            by = c("item2" = "word")) %>%
+  rename(freq.2 = n) %>% filter(correlation >= 0)
+
+
+Top.corr.pares <- corr.pares %>% 
+  filter(correlation >= 0.20)  %>%
+  filter(freq.1 >= 10,
+         freq.2 >= 10) %>% 
+  filter(item1 < item2, 
+         correlation != 1.0, 
+         item2 != "york")
+```
+
+
 ## Bibliografía
 
 <!-- Cita de extraccion de la fecha de apolo -->
