@@ -516,8 +516,7 @@ mayor calificación de IMDb. Con respecto al aspecto comercial, Anthony
 Russo, J. J. Abrams y James Cameron son los directores más exitosos en
 promedio.
 
-##Análisis de tramas y género peliculas
-
+### Trama y género peliculas
 ```{r}
 #Carga documento de análisis de trama y género:
 
@@ -525,7 +524,46 @@ source("02_analisis_trama_y_genero.R")
 
 ```
 
+En cuánto al análisis de trama se encontraron resultados interesentes. Para los pares de palabras que conjuntamente son más frecuentes, se pueden observar algunos patrones narrativos como: historias desarolladas durante las guerras mundiales, siendo más frecuentes narrativas ambientadas en la segunda; relatos de relaciones paternofiliales; narrativas que exploran encontrar el amor; historias basadas en la realidad, tipo biograficas; relacionadas con el crimen o la justicia, cómo acusaciones de homicidios; historias narradas o de tipo **story telling** e historias de índole detective investiga crimen o de agentes secretos. Cabe recalcar que estas relaciones solo analizan pares de palabras que son probables de ir juntas (ver Anexos tabla: "") en diferentes peliculas y que independientemente no representan una cantidad significativa de las peliculas del dataset.
 
+Por otro lado las palabras (únicas) más frecuentes, filtradas por relevancia, apoyan los resultados de los pares en el apartado de historias de guerra, cuya palabra por si sola se encuentra en $10.4%$ de las peliculas del dataset. Otras palabras con peso incluyen relaciones interpersonales cómo **friends** o de familia cómo: **son, family, father**; y de individuos **woman, boy, girl**. De nuevo hace falta mencionar que los resultados son limitados pues las palabras por si solas no revelan una narrativa, por lo que las interpretaciones pueden resultar especulativas y sesgadas, además que no pertenecen a una cantidad significativa de peliculas e incluso pueden aparecer juntas por lo que los porcentajes no son aditivos.
+
+```{r}
+#Tabla resultados palabra:
+
+seleccion <- c(
+  "family",
+  "father",
+  "son",
+  "friends",
+  "woman",
+  "girl",
+  "boy"
+)
+
+resultados.palabra %>%
+  filter(word %in% seleccion) %>%
+  mutate(
+    imdb = round(imdb, 2),
+    meta = round(meta, 2)
+  ) %>%
+  select(
+    Palabra = word,
+    Frecuencia = n,
+    Películas = peliculas,
+    `% Películas` = porcentaje,
+    IMDb = imdb,
+    MetaScore = meta
+  ) %>%
+  kable(
+    caption = "Palabras narrativas"
+  )
+```
+
+En cuantó a las conclusiones que podemos realizar de este análisis explorativo, podemos decir que en las tablas reportadas, el público general representado por la calificación imdb muestra tendencia hacia narrativas orientadas a la guerra, particularmente a las referidas con la segunda guerra mundial, e historias de detectives o de encontrar el amor, por otro lado la crítica especializada representada por meta score parece coincidir en que las historias de la segunda guerra mundial promedian mayor puntaje, así como una inclinación por relatos detectivescos o de agentes secretos.
+
+
+Dadas las limitaciones, las conclusiones anteriores deben ser tomadas con reserva, pues en adicióna las problemáticas presentadas, las cantidades de peliculas por palabras o palabra suelen variar y no ser proporcionales. Sin embargo si tenemos que extraer una narrativa con contundencia nos podemos decantar por las alusivas a la segunda guerra mundial o más general a la guerra pues son las que reunen mayor cantidad en porcentaje, junto a promediar calificaciones destacadas. 
 
 ## Bibliografía
 
