@@ -162,7 +162,7 @@ resultados.palabra <- Top.palabra  %>%
   arrange(desc(peliculas))
 
 
-#Análisis x género:
+#Análisis x género: ----
 
 generos <- strsplit(
   as.character(peliculas$Genre),
@@ -254,4 +254,39 @@ analizar.genero <- function(data, genero){
   
 }
 
+##Resultados análisis x género: ----
+resultados.generos <- tibble(
+  genero = generos$Genre
+) %>%
+  rowwise() %>%
+  mutate(
+    analisis = list(
+      analizar.genero(
+        peliculas,
+        genero
+      )
+    )
+  ) %>%
+  tidyr::unnest(analisis) %>% 
+  arrange(desc(diferencia.critica))
 
+##Intersección de géneros: ----
+
+###Resultado estadísto de intersecciones de géneros en peliculas: ----
+
+res.interseccion.gen <- tibble(
+  genero = peliculas$Genre
+) %>%
+  rowwise() %>%
+  mutate(
+    analisis = list(
+      analizar.genero.unico(
+        peliculas,
+        genero
+      )
+    )
+  ) %>%
+  tidyr::unnest(analisis) %>% 
+  arrange(desc(peliculas)) %>% 
+  distinct(genero, .keep_all = TRUE) %>% 
+  filter(peliculas > 20)
