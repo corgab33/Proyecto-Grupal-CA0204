@@ -57,12 +57,14 @@ para la lectura de los datos y `magrittr, dplyr` para la manipulación
 de estos.
 
 ```{r}
-
 library(readr)
 library(magrittr)
 library(dplyr)
 library(tidyr)
 library(knitr)
+library(widyr)
+library(purrr)
+library(tidyr)
 
 ```
 
