@@ -66,6 +66,13 @@ library(widyr)
 library(purrr)
 library(tidyr)
 library(ggplot2)
+library(tidytext)
+```
+
+```{r}
+#Carga documentos funciones:
+source("01_funciones_auxiliares.R")
+
 ```
 
 Luego, importamos el dataset a partir de un archivo `.csv`, mediante la librería `readr`
@@ -520,6 +527,13 @@ Russo, J. J. Abrams y James Cameron son los directores más exitosos en
 promedio.
 
 ##Análisis de tramas y género peliculas
+
+```{r}
+#Carga documento de análisis de trama y género:
+
+source("02_analisis_trama_y_genero.R")
+
+```
 
 
 
