@@ -81,7 +81,7 @@ source("01_funciones_auxiliares.R")
 
 ```
 
-Luego, importamos el dataset a partir de un archivo `.csv`, mediante la
+Luego, se importó el dataset a partir de un archivo `.csv`, mediante la
 librería `readr`.
 
 ```{r}
@@ -122,9 +122,8 @@ df <- df.original %>%
 
 Se agrega una variable `id` con valores consecutivos para identificar de
 manera única cada fila del `dataframe`. Se presenta de mayor a menor
-calificación IMDb. De esta forma, el `id` permite ubicar y referenciar
-con mayor facilidad cada observación durante la manipulación de los
-datos.
+calificación IMDb. De esta forma, el `id` permite referenciar
+con mayor facilidad cada observación durante la manipulación de datos.
 
 ```{r}
 
@@ -138,10 +137,9 @@ df <- df %>%
 
 Las variables `IMDB_Rating`, `Meta_score`, `Runtime` y `Gross`
 representan datos numéricos y serán utilizadas posteriormente para
-realizar operaciones estadísticas, como promedios y correlaciones. Por
-ello, se convierten explícitamente a clase de datos `numeric` para el
+realizar operaciones estadísticas. Por ello, se convierten explícitamente a clase de datos `numeric` para el
 rating y no perder decimales e `integer` para los demás, pues no
-contienen decimales y se ahorra espacio en la memoria, con el fin de
+contienen decimales y se ahorra espacio en memoria, con el fin de
 garantizar que R las reconozca como variables cuantitativas.
 
 ```{r}
@@ -162,17 +160,26 @@ df$Released_Year[which(is.na(df$Released_Year))] <- 1995
 
 ### Técnicas y herramientas
 
+<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
 Para los análisis se filtra `df` para que solo contenga las observaciones en las que existe cálificación de `Meta_score`, es decir eliminamos las observaciones con ``NA`.
 
 #### Análisis sinópsis:
 
 Para el análisis de la sinópsis empleamos la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar y eliminar artículos que no aportan información relevante de las tramas de las peliculas. Además filtramos por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, es decir,  mide la fuerza en la relación de las variables, esto nos pérmitira obtener una mejor aproximación a las tématicas frecuentes que analizar por una sola palabra, además se forman narrativas más completas.
+=======
+<!-- Pendiente: describir cada técnica y cómo responde al objetivo. -->
+Para los análisis se filtra `df` para que solo contenga las observaciones en las que existe cálificación de `Meta_score`, es decir se eliminan las observaciones con ``NA`.
 
-Para extraer los resultados de los análisis creamos las funciones `analizar.palabra` y `analizar.par`, que lee una palabra y un par de palabras, respectivamente, y arroja un tibble que contiene un análisis estadístico con las variables: peliculas, cantidad de peliculas contienen palabra/s; porcentaje, proporción del total; imdb y meta, que contienen el promedio de calificación de esas peliculas para cada palabra o par.
+#### Análisis sinópsis:
+
+Se empleó la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar artículos que no aportan información relevante de las tramas de las peliculas. Además, se filtró por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, esto permite obtener una mejor aproximación a las tématicas frecuentes y además, se forman narrativas más completas.
+>>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
+
+Para extraer los resultados de los análisis se crearon las funciones `analizar.palabra` y `analizar.par`, que lee una palabra y un par de palabras, respectivamente, y arroja un tibble que contiene un análisis estadístico con las variables: peliculas, cantidad de peliculas contienen palabra/s; porcentaje, proporción del total; imdb y meta, que contienen el promedio de calificación de esas peliculas para cada palabra o par.
 
 #### Apartado análisis género:
 
-Para el análisis de género separamos los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que se hace en sinópsis creamos las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género, de forma individual (solo un género) o compuesta cómo se encuentran originalmente en `df.original`.
+Para el análisis de género se separaron los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que se hace en sinópsis, se crearon las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género, de forma individual (solo un género) o compuesta cómo se encuentran originalmente en `df.original`.
 
 
 ## Resultados
@@ -282,7 +289,7 @@ que puede ser contabilizada en varias categorías.*
 directores <- df.original %>%
   filter(!is.na(Director), Director != "") %>%
   count(Director, sort = TRUE) %>%
-  head(8)
+  head(5)
 
 knitr::kable(
   directores,
@@ -356,7 +363,7 @@ promedio.taquilla <- mean(df$Gross, na.rm = TRUE)/1e6
 
 ```
 
-Exploramos algunos de los promedios de calificaciones entre el público y
+Se exploraron algunos de los promedios de calificaciones entre el público y
 la crítica, así cómo su correlación. Además incluimos los promedios de
 duración y de taquilla:
 
@@ -432,7 +439,7 @@ superior en promedio. Sin embargo, hay que tomar en cuenta las
 diferencias de tamaño en los grupos.
 
 El protagonista de una película y quién dirige tal película, constituyen
-partes importantes de la fórmula ganadora. Por tal razón, se analiza la
+partes importantes para el análisis. Por tal razón, se analiza la
 relación entre el ingreso de una película, su calificación en IMDb, su
 director y protagonista. Específicamente, se consideran los actores
 protagonistas y directores cuyas películas en promedio generan las
@@ -571,11 +578,18 @@ pueden observar algunos patrones narrativos como: historias desarolladas
 durante las guerras mundiales, siendo más frecuentes narrativas
 ambientadas en la segunda; relatos de relaciones paternofiliales;
 narrativas que exploran encontrar el amor; historias basadas en la
+<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
 realidad, tipo biográficas; relacionadas con el crimen o la justicia,
 cómo acusaciones de homicidios e historias de índole agentes secretos.
 Cabe recalcar que estas relaciones solo
 analizan pares de palabras que son probables de ir juntas en diferentes
 peliculas y que independientemente no representan una cantidad
+=======
+realidad, tipo biograficas; relacionadas con el crimen o la justicia,
+cómo acusaciones de homicidios e historias de índole detective investiga
+crimen o de agentes secretos. Cabe recalcar que estas relaciones solo
+analizan pares de palabras que son probables de ir juntas y que independientemente no representan una cantidad
+>>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 significativa de las peliculas del dataset.
 
 ```{r}
@@ -615,14 +629,18 @@ resultados.par %>%
   )
 ```
 
-Por otro lado las palabras (únicas) más frecuentes, filtradas por
+Por otro lado, las palabras (únicas) más frecuentes, filtradas por
 relevancia, apoyan los resultados de los pares en el apartado de
 historias de guerra, cuya palabra *war* por si sola se encuentra en $6%$ de
 las peliculas del dataset. Otras palabras con peso incluyen relaciones
+<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
 interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta 
 mencionar que los resultados son limitados pues las palabras por si
+=======
+interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta mencionar que las palabras por si
+>>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 solas no revelan una narrativa, por lo que las interpretaciones pueden
-resultar especulativas y sesgadas, además que no pertenecen a una
+resultar especulativas o sesgadas, además que no pertenecen a una
 cantidad significativa de peliculas e incluso pueden aparecer juntas por
 lo que los porcentajes no son aditivos.
 
@@ -657,6 +675,7 @@ resultados.palabra %>%
   )
 ```
 
+<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
 En cuantó a las conclusiones que podemos realizar de este análisis
 exploratorio, podemos decir que en las tablas reportadas, el público
 general representado por la calificación imdb muestra tendencia hacia
@@ -664,6 +683,13 @@ narrativas orientadas a la guerra, particularmente a las referidas con
 la segunda guerra mundial y de encontrar el
 amor, por otro lado la crítica especializada representada por meta score
 parece coincidir en que las historias de la segunda guerra mundial
+=======
+Se podria decir que en las tablas reportadas, el público
+general representado por la calificación imdb muestra tendencia hacia
+narrativas orientadas a la guerra, particularmente a las referidas con
+la segunda guerra mundial, e historias de detectives o de romance, por otro lado la crítica especializada representada por meta score
+parece coincidir en que las historias de guerra mundial
+>>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 promedian mayor puntaje, así como una inclinación por relatos
 detectivescos o de agentes secretos.
 
@@ -671,6 +697,7 @@ Dadas las limitaciones, las conclusiones anteriores deben ser tomadas
 con reserva, pues en adición a las problemáticas presentadas, las
 cantidades de peliculas por palabras o palabra suelen variar y no ser
 proporcionales. Sin embargo si tenemos que extraer una narrativa con
+<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
 contundencia nos podemos decantar por las alusivas a la segunda guerra
 mundial o más general a la guerra pues son las que reunen mayor cantidad
 en porcentaje, y que a la vez promedian calificaciones destacadas.
@@ -682,6 +709,18 @@ En la data encontramos que géneros cómo drama, `Comedy`, `Adventure` y `Crime`
 En cuánto a los distintos párametros encontramos en `resultados.generos` que en taquilla las peliculas que promedian más incluyen `Adventure`, `Sci-Fi` y `Action`, mientras que la crítica del público se orienta a peliculas cómo `Film-Noir`, `Western` y `War`, por otra parte la crítica especializada comparte preferencias por el `Film-Noir` y `Western`, además incluyen `Horror` en sus tres mejores calificados.
 
 Para contrastar podemos ver las combinaciones en `res.interseccion` de géneros más presentes, en lo que composiciones cómo `Crime, Drama`, se repiten entre los mejores calificados (meta e imdb), aunque la crítica especializada y taquilla eligen en cómun `Animation, Adventure, Comedy` y `Drama, Romance` cómo los géneros de mayor éxito, además los mayores éxitos en taquilla lo recibe el género compuesto por `Accion, Adventure, Sci-Fi`. Asimismo también encontramos que el apartado crítica suele diferir más en los géneros `Action, Adventure, Sci-Fi`; `Crime, Drama, Thriller` y `Action, Crime, Drama`. La tendencia es que el público valora peliculas con estas características, en mayor medida que su contraparte especializada.
+=======
+contundencia nos podemos decantar por las alusivas a la guerra pues son las que reunen mayor cantidad
+en porcentaje, y que a promedian calificaciones destacadas.
+
+### Género 
+
+En la data se encontró que géneros cómo drama, `Comedy`, `Adventure` y `Crime` son los más ubicuos, con especial enfásis en drama que aparece en más del $71%$ de las peliculas de la lista. Por otro lado géneros cómo `Sport, Musical` y `Film Noir` son los menos frecuentes, con menos del $2%$ de presencia. En cuánto a intersecciones de géneros encontramos que los tres más frecuentes incluyen `Drama`, `Comedy, Drama` y `Drama, Romance``reforzando la idea de Drama cómo género central.
+
+En cuánto a los distintos párametros encontramos en `resultados.generos` que en taquilla las peliculas que promedian más incluyen `Adventure`, `Sci-Fi` y `Action`, mientras que la crítica del público se orienta a peliculas cómo `Film-Noir`, `Western` y `War`, por otra parte la crítica especializada comparte preferencias por el `Film-Noir` y `Western`, además incluyen `Horror` en sus tres mejores calificados.
+
+Para contrastar se pueden ver las combinaciones en `res.interseccion` de géneros más presentes, en lo que composiciones cómo `Crime, Drama`, se repiten entre los mejores calificados (meta e imdb), aunque la crítica especializada y taquilla eligen en cómun `Animation, Adventure, Comedy` y `Drama, Romance` cómo los géneros de mayor éxito, además los mayores éxitos en taquilla lo recibe el género compuesto por `Accion, Adventure, Sci-Fi`. Asimismo también encontramos que el apartado crítica suele diferir más en los géneros `Action, Adventure, Sci-Fi`,  `Crime, Drama, Thriller` y `Action, Crime, Drama`, la tendencia es que el público valora peliculas con estas características, en mayor medida que su contraparte especializada.
+>>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 
 ```{r}
 
@@ -707,7 +746,7 @@ res.interseccion %>%
   )
 
 ```
-En cuánto a los alcances del análisis observamos una discrepancia entre los géneros individuales que dominan en los párametros mencionados y la composición que observamos originalmente en el `df.original`, especialmente en el apartado crítica. Esto puede ocurrir por varias razones, en primer lugar los géneros individuales se pueden encontrar en varias categorias de peliculas lo que provoca que géneros como `Drama`, `Comedy`, `Adventure` y `Crime` que acumulan mayor volumen en la lista tengan un promedio más bajo pues abordan una gama amplia y variada de peliculas, en cambio otras con una cantidad menor a 100, tengan un promedio más alto pues la categorias son más específicas. Por otro lado en taquilla no tenemos disparidad pues incluyen géneros blockbusters o peliculas de alto presupuesto que promedian grandes taquillas.
+En cuánto a los alcances del análisis, se observó una discrepancia entre los géneros individuales que dominan en los párametros mencionados y la composición que observamos originalmente en el `df.original`, especialmente en el apartado crítica. Esto puede ocurrir por varias razones, en primer lugar los géneros individuales se pueden encontrar en varias categorias de peliculas lo que provoca que géneros como `Drama`, `Comedy`, `Adventure` y `Crime` que acumulan mayor volumen en la lista tengan un promedio más bajo pues abordan una gama amplia y variada de peliculas, en cambio otras con una cantidad menor a 100, tengan un promedio más alto pues la categorias son más específicas. Por otro lado en taquilla no tenemos disparidad pues incluyen géneros blockbusters o peliculas de alto presupuesto que promedian grandes taquillas.
 
 Además de lo anterior, encontramos otra diferencia en cuánto a lo analizado en sinópsis donde vimos que la palabra bélica en la descripción representaba una de las más habituales y de mayor éxito, mientras que en este apartado no aparecen entre las composiciones más habituales aunque tenga su propia etiqueta `War`. Una explicación plausible es que solo hay 45 peliculas con esta etiqueta en toda la lista lo que representa solo  el 5.34% de esta, por lo que es muy poco frecuente, sin embargo esto no implica que el análisis de sinópsis haya sido mal planteado sino que la tématica se materializa en otros géneros cómo `Drama`; `Biography`; `History`; `Thriller`, etc.
 
@@ -771,14 +810,17 @@ generation in R* (versión 1.50) \[Paquete de R\].
 ## Anexos
 
 ```{r}
-#Carga gráficos:
+# Carga gráficos:
 source("03_graficos.R")
 ```
 
 
+<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
 Repositorio del proyecto:
 <https://github.com/corgab33/Proyecto-Grupal-CA0204>
 
+=======
+>>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 
 ```{r}
 tabla.generos <- resultados.generos %>%
@@ -812,18 +854,40 @@ kable(
 ```
 *Tabla 1: Representatividad de los géneros en peliculas*
 ```{r}
-#Graficos análisis género:
+# Graficos análisis género:
 grafico.gen.representativos
 
 ```
 ```{r}
-#Grafica diferencia de critica x género:
+# Grafica diferencia de critica x género:
 grafico.diferencia.critica
 
 ```
 ```{r}
-#Grafica analisis de duración
+# Grafica analisis de duración
 grafico.duracion
  
 ```
 La duración marca una leve diferencia, y tomando en cuenta la cantidad de películas que pertenecen a los rangos de duración, notamos que son relativamente pocas las que que tienen una duración mayor a dos horas y media (150 minutos o más), pero en términos de promedios, si tienen una calificación más alta las peliculas con mayor duración.
+```{r}
+# Gráfico de protagonistas por calificación
+grafico.actores.rating
+```
+```{r}
+# Gráfico de protagonistas por ingresos
+grafico.actores.revenue
+```
+```{r}
+# Gráfico de directores por calificacion
+grafico.directores.rating
+```
+```{r}
+# Gráfico de directores por ingresos
+grafico.directores.revenue
+```
+Existen diferencias entre la calificación y los ingresos observados en este análisis, se podría considerar que para el público existe una influencia dependiendo del elenco y directores reconocidos que participen en una película, llamando la atención de espectadores al momento del lanzamiento antes de conocer su crítica, señalando que existe un comportamiento distinto entre sus críticas, que no toman en cuenta los miembros del estudio como tal, mientras que en sus ingresos si existe una relación del elenco y directores que puede sumar a su popularidad.
+
+
+### Repositorio del proyecto:
+<https://github.com/corgab33/Proyecto-Grupal-CA0204>
+
