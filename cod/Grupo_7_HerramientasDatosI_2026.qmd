@@ -732,6 +732,40 @@ Además de lo anterior, encontramos otra diferencia en cuánto a lo analizado en
 
 Podemos concluir de lo anterior que los géneros individuales pueden distorsionar el análisis por variabilidad en el número de peliculas y que la intersección entre géneros es más confiable pues son proporcionalmente semejantes y que aunque no sea explicíto en la etiqueta, la guerra está presente cómo ambientación o catalizador en las peliculas.
 
+### Síntesis de resultados
+
+Los análisis muestran que ninguna característica, por sí sola, asegura el
+éxito al mismo tiempo ante el público, la crítica y la taquilla. Estas tres
+medidas siguen caminos distintos: la correlación entre la calificación IMDb
+y el Metascore es de apenas 0.27, y los directores con mejor calificación
+(Christopher Nolan, Frank Darabont y Francis Ford Coppola) no son los que
+generan más ingresos (Anthony Russo, J. J. Abrams y James Cameron).
+
+El género es la característica que más acerca las tres dimensiones. La
+combinación Animation, Adventure, Comedy tiene uno de los Metascore más
+altos (83.30), una taquilla promedio de 225.17 millones de dólares y una
+calificación IMDb (7.93) cercana al promedio general (7.95). En cambio,
+Action, Adventure, Sci-Fi registra la taquilla más alta (280.89 millones),
+pero el Metascore más bajo entre las combinaciones frecuentes (71.52). El
+drama, presente en más del 71% de las películas, sostiene buenas
+calificaciones, pero no destaca en taquilla.
+
+La duración y la trama aportan diferencias pequeñas. Las películas de 150
+minutos o más promedian 8.10 en IMDb, frente a valores entre 7.89 y 7.96 en
+las más cortas, aunque son grupos con menos películas. En la trama, las
+historias de guerra son el patrón más frecuente y reciben buena valoración
+de la crítica (Metascore de 81.31 para el par *war* + *world*), pero
+aparecen solo en el 3.4% de las películas.
+
+En respuesta al objetivo, el perfil que más se acerca al éxito en los tres
+frentes combina aventura y animación con comedia, mientras que el
+protagonista, el director y la duración se asocian sobre todo con una sola
+de las dimensiones. Estos resultados deben leerse con cautela: el conjunto
+incluye solo las 1000 películas mejor calificadas, por lo que las
+diferencias entre grupos son pequeñas; se excluyeron las películas sin
+Metascore o sin taquilla; la taquilla no está ajustada por inflación; y las
+relaciones encontradas son asociaciones, no causas.
+
 
 ## Bibliografía
 
