@@ -23,7 +23,7 @@ Trama.words <- peliculas %>%
 #aparicion en la misma pelicula
 #Responde: ¿En cuántas películas aparece esta palabra?
 frecuencias <- Trama.words %>%
-  distinct(Series_Title, word) %>%
+  distinct(id, word) %>%
   count(word, sort = T) %>%
   filter(n >= 10)
 
@@ -42,7 +42,7 @@ Trama.filtrado <- Trama.words %>%
 corr.pares <- Trama.filtrado %>%
   pairwise_cor(
     word,
-    Series_Title,
+    id,
     sort = TRUE
   ) %>%
   left_join(frecuencias,
