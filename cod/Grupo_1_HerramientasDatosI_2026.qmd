@@ -705,7 +705,7 @@ res.interseccion %>%
   ) %>%
   kable(
     caption = "Combinaciones de géneros más frecuentes en las películas analizadas",
-    align = c("l", "r", "r", "r", "r", "r", "r", "r")
+    align = c("l", "l", "r", "r", "r", "r")
   )
 
 ```
