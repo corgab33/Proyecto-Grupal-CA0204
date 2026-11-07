@@ -450,6 +450,7 @@ asociadas.
 
 df.actors.directors <- df.original |>
     drop_na(IMDB_Rating, Gross) |>
+    mutate(Star1 = if_else(Star1 == "Joe Russo", Star2, Star1)) |>
     rename(title = Series_Title, rating = IMDB_Rating, revenue = Gross, protagonist = Star1, director = Director) |>
     select(title, rating, revenue, protagonist, director)
 
@@ -521,8 +522,8 @@ actors.grouping |>
 
 Con respecto al protagonista, se observa que en promedio los actores
 Elijah Wood, Tim Robbins y Mark Hamill se asocian, en promedio, a las
-mayores calificaciones en la plataforma IMDb. Por otro lado, son Joe
-Russo, Daisy Ridley y Daniel Radcliffe quienes están asociados en
+mayores calificaciones en la plataforma IMDb. Por otro lado, son Robert
+Downey Jr., Daisy Ridley y Daniel Radcliffe quienes están asociados en
 promedio al mayor éxito comercial.
 
 ```{r}
