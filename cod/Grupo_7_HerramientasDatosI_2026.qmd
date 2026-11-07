@@ -172,6 +172,37 @@ Para extraer los resultados de los análisis se crearon las funciones `analizar.
 
 Para el análisis de género se separaron los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que se hace en sinópsis, se crearon las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género, de forma individual (solo un género) o compuesta cómo se encuentran originalmente en `df.original`.
 
+#### Análisis de protagonistas y directores
+
+En el caso de la influencia del protagonista y/o director en el éxito
+de la película (tanto comercial como ante la crítica), por cada
+director registrado en el dataset se considera el conjunto de
+películas en las que ha participado, luego se calcula la calificación
+e ingreso promedio de tales películas. De manera similar se procede
+con los protagonistas.
+
+Esto permite determinar en promedio qué directores y protagonistas
+contribuyen más al éxito de las películas. En este caso, *promedio*,
+se refiere a la media bayesiana con una parámetro de confianza de $k =
+4$. Este promedio determina el peso del promedio general, es decir,
+entre más pequeño sea el grupo analizado, más se ve afectado por el
+promedio general (MetricGate, 2025). Esto para contemplar los
+promedios artificialmente altos debido una pequeña cantidad de
+películas asociadas.
+
+Específicamente, primero se calcula la calificación e ingreso promedio
+de todas las películas, puesto que estos son parámetros necesarios
+para determinar la media bayesiana. Luego, se implementa la función
+`bayesian.mean` para calcular la media bayesiana dados los promedios
+grupales y globales, con un parémetro de confianza de `k = 4`.
+
+Acto seguido, se agrupan los datos por la variable de director. De
+esta manera, por cada director se cálcula la media bayesiana
+correspondiente. Finalmente, se ordenan los datos de manera
+decreciente según la media calculada, para presentar los primeros tres
+directores tanto en la categoría de calificación como de
+ingreso. Luego, se aplica un proceso análogo en el caso de los
+protagonistas.
 
 ## Resultados
 
@@ -434,13 +465,7 @@ partes importantes para el análisis. Por tal razón, se analiza la
 relación entre el ingreso de una película, su calificación en IMDb, su
 director y protagonista. Específicamente, se consideran los actores
 protagonistas y directores cuyas películas en promedio generan las
-calificaciones más altas o los mayores ingresos. En este caso,
-*promedio*, se refiere a la media bayesiana con una parámetro de
-confianza de $k = 4$. Este promedio determina el peso del promedio
-general, es decir, entre más pequeño sea el grupo analizado, más se ve
-afectado por el promedio general (MetricGate, 2025). Esto para contemplar los promedios
-artificialmente altos debido una pequeña cantidad de películas
-asociadas.
+calificaciones más altas o los mayores ingresos. 
 
 ```{r}
 #| echo: false
