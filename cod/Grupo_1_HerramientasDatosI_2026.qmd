@@ -43,7 +43,7 @@ La relevancia de este tema radica en la posibilidad de identificar patrones pres
 El dataset que se plantea usar en el proyecto es el siguiente: [Top 1000
 IMDB movies](https://doi.org/10.34740/kaggle/dsv/3954453).
 
-Este dataset incluye las 1000 mejores peliculas de la historia, a nivel global; usando como periodo de cobertura desde el año 1975 hasta 2022 (última actualización), según IMDb. Fue extraído de la base de datasets de la página web [Kaggle](https://www.kaggle.com/datasets). Los datos se recopilaron a través del método *web scraping* desde la página web oficial pública de IMDbd usando *Selenium*; una herramienta de código abierto que sirve para entre otras cosas, la extracción de datos en navegadores web. 
+Este dataset incluye las 1000 mejores peliculas de la historia, a nivel global; usando como periodo de cobertura desde el año 1920 hasta 2022 (última actualización), según IMDb. Fue extraído de la base de datasets de la página web [Kaggle](https://www.kaggle.com/datasets). Los datos se recopilaron a través del método *web scraping* desde la página web oficial pública de IMDbd usando *Selenium*; una herramienta de código abierto que sirve para entre otras cosas, la extracción de datos en navegadores web. 
 
 ## Objetivo general
 
@@ -167,7 +167,7 @@ Para los análisis se filtra `df` para que solo contenga las observaciones en la
 
 #### Análisis sinópsis:
 
-Para el análisis de la sinópsis empleamos la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar y eliminar artículos que no aportan información relevante de las tramas de las peliculas. Además filtramos por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, es decir,  mide que tan probable es que si aparece una palabra también encontremos al par correspondiente, esto nos pérmitira obtener una mejor aproximación a las tématicas frecuentes que analizar por una sola palabra, además se forman narrativas más completas.
+Para el análisis de la sinópsis empleamos la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar y eliminar artículos que no aportan información relevante de las tramas de las peliculas. Además filtramos por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, es decir,  mide la fuerza en la relación de las variables, esto nos pérmitira obtener una mejor aproximación a las tématicas frecuentes que analizar por una sola palabra, además se forman narrativas más completas.
 
 Para extraer los resultados de los análisis creamos las funciones `analizar.palabra` y `analizar.par`, que lee una palabra y un par de palabras, respectivamente, y arroja un tibble que contiene un análisis estadístico con las variables: peliculas, cantidad de peliculas contienen palabra/s; porcentaje, proporción del total; imdb y meta, que contienen el promedio de calificación de esas peliculas para cada palabra o par.
 
@@ -571,9 +571,9 @@ pueden observar algunos patrones narrativos como: historias desarolladas
 durante las guerras mundiales, siendo más frecuentes narrativas
 ambientadas en la segunda; relatos de relaciones paternofiliales;
 narrativas que exploran encontrar el amor; historias basadas en la
-realidad, tipo biograficas; relacionadas con el crimen o la justicia,
-cómo acusaciones de homicidios e historias de índole detective investiga
-crimen o de agentes secretos. Cabe recalcar que estas relaciones solo
+realidad, tipo biográficas; relacionadas con el crimen o la justicia,
+cómo acusaciones de homicidios e historias de índole agentes secretos.
+Cabe recalcar que estas relaciones solo
 analizan pares de palabras que son probables de ir juntas en diferentes
 peliculas y que independientemente no representan una cantidad
 significativa de las peliculas del dataset.
@@ -617,10 +617,9 @@ resultados.par %>%
 
 Por otro lado las palabras (únicas) más frecuentes, filtradas por
 relevancia, apoyan los resultados de los pares en el apartado de
-historias de guerra, cuya palabra por si sola se encuentra en $10.4%$ de
+historias de guerra, cuya palabra *war* por si sola se encuentra en $6%$ de
 las peliculas del dataset. Otras palabras con peso incluyen relaciones
-interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta.
-
+interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta 
 mencionar que los resultados son limitados pues las palabras por si
 solas no revelan una narrativa, por lo que las interpretaciones pueden
 resultar especulativas y sesgadas, además que no pertenecen a una
@@ -648,7 +647,6 @@ resultados.palabra %>%
   ) %>%
   select(
     Palabra = word,
-    Frecuencia = n,
     Películas = peliculas,
     `% Películas` = porcentaje,
     IMDb = imdb,
@@ -660,10 +658,10 @@ resultados.palabra %>%
 ```
 
 En cuantó a las conclusiones que podemos realizar de este análisis
-explorativo, podemos decir que en las tablas reportadas, el público
+exploratorio, podemos decir que en las tablas reportadas, el público
 general representado por la calificación imdb muestra tendencia hacia
 narrativas orientadas a la guerra, particularmente a las referidas con
-la segunda guerra mundial, e historias de detectives o de encontrar el
+la segunda guerra mundial y de encontrar el
 amor, por otro lado la crítica especializada representada por meta score
 parece coincidir en que las historias de la segunda guerra mundial
 promedian mayor puntaje, así como una inclinación por relatos
@@ -711,7 +709,7 @@ res.interseccion %>%
 ```
 En cuánto a los alcances del análisis observamos una discrepancia entre los géneros individuales que dominan en los párametros mencionados y la composición que observamos originalmente en el `df.original`, especialmente en el apartado crítica. Esto puede ocurrir por varias razones, en primer lugar los géneros individuales se pueden encontrar en varias categorias de peliculas lo que provoca que géneros como `Drama`, `Comedy`, `Adventure` y `Crime` que acumulan mayor volumen en la lista tengan un promedio más bajo pues abordan una gama amplia y variada de peliculas, en cambio otras con una cantidad menor a 100, tengan un promedio más alto pues la categorias son más específicas. Por otro lado en taquilla no tenemos disparidad pues incluyen géneros blockbusters o peliculas de alto presupuesto que promedian grandes taquillas.
 
-Además de lo anterior, encontramos otra diferencia en cuánto a lo analizado en sinópsis donde vimos que la tématica bélica representaba una de las más habituales y de mayor éxito, mientras que en este apartado no aparecen entre las composiciones más habituales aunque tenga su propia etiqueta `War`. Una explicación plausible es que solo hay 45 peliculas con esta etiqueta en toda la lista lo que representa solo  el $5.34%$ de esta, por lo que es muy poco frecuente, sin embargo esto no implica que el análisis de sinópsis haya sido mal planteado sino que la tématica se materializa en otros géneros cómo `Drama`, `Biography`, `History`, `Thriller`, etc.
+Además de lo anterior, encontramos otra diferencia en cuánto a lo analizado en sinópsis donde vimos que la palabra bélica en la descripción representaba una de las más habituales y de mayor éxito, mientras que en este apartado no aparecen entre las composiciones más habituales aunque tenga su propia etiqueta `War`. Una explicación plausible es que solo hay 45 peliculas con esta etiqueta en toda la lista lo que representa solo  el $5.34%$ de esta, por lo que es muy poco frecuente, sin embargo esto no implica que el análisis de sinópsis haya sido mal planteado sino que la tématica se materializa en otros géneros cómo `Drama`, `Biography`, `History`, `Thriller`, etc.
 
 Podemos concluir de lo anterior que los géneros individuales pueden distorsionar el análisis por variabilidad en el número de peliculas y que la intersección entre géneros es más confiable pues son proporcionalmente semejantes y que aunque no sea explicíto en la etiqueta, la guerra está presente cómo ambientación o catalizador en las peliculas.
 
