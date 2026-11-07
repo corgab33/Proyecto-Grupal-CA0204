@@ -38,22 +38,14 @@ editor:
 
 <!-- Pendiente: completar contexto, relevancia (máx. 1 página). -->
 
+El cine es una de las formas de entretenimiento y expresión cultural más influyentes a nivel mundial. Gracias a plataformas como IMDb (Internet Movie Database), es posible acceder a grandes volúmenes de información sobre películas, incluyendo sinopsis de películas, teasers, recomendaciones, reseñas y calificaciones tanto del público *(IMDb rating)* como de la crítica especializada *(Meta score)*. Estos datos permiten estudiar qué características comparten las películas mejor valoradas y cómo distintos elementos, como los actores, directores, géneros y las historias narradas, se relacionan con su recepción por parte de las audiencias.
+
+La relevancia de este tema radica en la posibilidad de identificar patrones presentes en las películas más reconocidas y mejor valoradas. El estudio de aspectos como el elenco, la dirección, la distribución de géneros, diferencias entre la opinión del público y la crítica especializada, así como los temas narrativos recurrentes en las tramas, permite comprender mejor las características que predominan en las producciones con mayor reconocimiento. Asimismo, este tipo de análisis constituye un ejemplo práctico de cómo las herramientas de ciencia de datos pueden utilizarse para extraer conocimiento útil a partir de grandes volúmenes de información textual y numérica.
+
 El dataset que se plantea usar en el proyecto es el siguiente: [Top 1000
 IMDB movies](https://doi.org/10.34740/kaggle/dsv/3954453).
 
-Extraído de la base de datasets de la página web
-[Kaggle](https://www.kaggle.com/datasets). Los datos se recopilaron a
-través del método *web scraping* desde la página web oficial pública de
-IMDbd usando *Selenium*; una herramienta de código abierto que sirve
-para entre otras cosas, la extracción de datos en navegadores web.
-
-Este dataset incluye las 1000 mejores peliculas de la historia, a nivel
-global; usando como periodo de cobertura desde el año 1975 hasta 2022
-(última actualización), según la página dedicada al cine y la televisión
-IMDb (Internet Movie Database), donde se incluye entre otras cosas
-sinopsis de peliculas, teasers, recomendaciones, reseñas y
-calificaciones tanto del público *(IMDb rating)* como de la crítica
-especializada *(Meta score)*.
+Este dataset incluye las 1000 mejores peliculas de la historia, a nivel global; usando como periodo de cobertura desde el año 1975 hasta 2022 (última actualización), según IMDb. Fue extraído de la base de datasets de la página web [Kaggle](https://www.kaggle.com/datasets). Los datos se recopilaron a través del método *web scraping* desde la página web oficial pública de IMDbd usando *Selenium*; una herramienta de código abierto que sirve para entre otras cosas, la extracción de datos en navegadores web. 
 
 ## Objetivo general
 
@@ -185,7 +177,7 @@ Para extraer los resultados de los análisis creamos las funciones `analizar.pal
 
 ####Apartado análisis género:
 
-Para el análisis de género separamos los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que hacemos en sinópsis creamos las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género analizado, de forma individual o compuesta cómo se encuentran originalmente en ``df.original`.
+Para el análisis de género separamos los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que se hace en sinópsis creamos las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género, de forma individual (solo un género) o compuesta cómo se encuentran originalmente en `df.original`.
 
 
 ## Resultados
