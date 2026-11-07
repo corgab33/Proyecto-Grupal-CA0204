@@ -9,13 +9,17 @@
 
 analizar.palabra <- function(data, palabra){
   
-  plot <- data %>%
-    filter(
-      str_detect(
-        Overview,
-        fixed(palabra)
-      )
-    )
+  #Selecciona filas que contienen la palabra y no subconjuntos de letras iguales 
+  #a la palabra
+  
+  ids.palabra = data %>% 
+    unnest_tokens(word, Overview) %>% 
+    filter(word == palabra) %>% 
+    distinct(id)
+  
+  # Guarda las observaciones que contienen la palabra
+  plot = data %>% 
+    semi_join(ids.palabra, by = "id")
   
   tibble(
     peliculas = nrow(plot),
@@ -28,13 +32,30 @@ analizar.palabra <- function(data, palabra){
 
 #Funcion crea un tibble con informacion estadistica de las peliculas filtradas
 #por par de palabras relevantes en la trama:
+
 analizar.par <- function(data, palabra1, palabra2){
   
+  #Separa Overview en palabras completas, de-selecciona observaciones duplicadas
+  palabras.peliculas = data %>% 
+    unnest_tokens(word, Overview) %>% 
+    distinct(id, word)
+  
+  #Escoge las que tienen la palabra1 buscada
+  ids.palabra1 = palabras.peliculas %>% 
+    filter(word == palabra1) %>% 
+    select(id)
+  
+  #Escoge las que tienen palabra 2 buscada
+  ids.palabra2 = palabras.peliculas %>% 
+    filter(word == palabra2) %>% 
+    select(id)
+  
+  #Union, escoge las observaciones que tienen las 2 palabras
+  ids.par = ids.palabra1 %>% 
+    inner_join(ids.palabra2, by = "id")
+  
   plot <- data %>%
-    filter(
-      str_detect(Overview, fixed(palabra1)),
-      str_detect(Overview, fixed(palabra2))
-    )
+    semi_join(ids.par, by = "id")
   
   tibble(
     peliculas = nrow(plot),
