@@ -43,13 +43,30 @@ grafico.diferencia.critica <- resultados.generos %>%
     x = NULL,
     y = "diferencia = IMDb - MetaScore/10"
   ) +
+  coord_flip(
+    clip = "off"
+  ) +
+
+  scale_y_continuous(
+    limits = c(
+      min(resultados.generos$diferencia.critica) - 0.2,
+      max(resultados.generos$diferencia.critica) + 0.2
+    )
+  ) +
+  
   theme_minimal() +
   theme(
     plot.title = element_text(
-      face = "bold"
+      face = "bold",
+      hjust = 0.5
+    ),
+    plot.margin = margin(
+      10,
+      20,
+      10,
+      20
     )
   )
-
 
 #Representitividad por género:
 
