@@ -162,7 +162,6 @@ df$Released_Year[which(is.na(df$Released_Year))] <- 1995
 
 ### Técnicas y herramientas
 
-<!-- Pendiente: describir cada técnica y cómo responde al objetivo. -->
 Para los análisis se filtra `df` para que solo contenga las observaciones en las que existe cálificación de `Meta_score`, es decir eliminamos las observaciones con ``NA`.
 
 #### Análisis sinópsis:
@@ -441,7 +440,7 @@ calificaciones más altas o los mayores ingresos. En este caso,
 *promedio*, se refiere a la media bayesiana con una parámetro de
 confianza de $k = 4$. Este promedio determina el peso del promedio
 general, es decir, entre más pequeño sea el grupo analizado, más se ve
-afectado por el promedio general. Esto para contemplar los promedios
+afectado por el promedio general (MetricGate, 2025). Esto para contemplar los promedios
 artificialmente altos debido una pequeña cantidad de películas
 asociadas.
 
@@ -717,10 +716,57 @@ Podemos concluir de lo anterior que los géneros individuales pueden distorsiona
 
 ## Bibliografía
 
-<!-- Cita de extraccion de la fecha de apolo -->
+Bache, S. M. y Wickham, H. (2022). *magrittr: A forward-pipe operator
+for R* (versión 2.0.3) \[Paquete de R\].
+<https://doi.org/10.32614/CRAN.package.magrittr>
 
-IMDb. (s.f.). Apolo 13 (1995). Recuperado el 5 de noviembre de 2026, de
-IMDb
+IMDb. (s.f.). *Apollo 13* (1995). Recuperado el 5 de noviembre de 2026,
+de <https://www.imdb.com/title/tt0112384/>
+
+Kotal, A. (2022). *IMBD top 1000 with description* \[Conjunto de
+datos\]. Kaggle. <https://doi.org/10.34740/kaggle/dsv/3954453>
+
+MetricGate. (2025). *Contracción de Bayes empírico* \[Aplicación web\].
+<https://metricgate.com/docs/es/empirical-bayes-shrinkage/>
+
+R Core Team. (2025). *R: A language and environment for statistical
+computing*. R Foundation for Statistical Computing.
+<https://www.R-project.org/>
+
+Robinson, D. y Silge, J. (2022). *widyr: Widen, process, then re-tidy
+data* (versión 0.1.5) \[Paquete de R\].
+<https://doi.org/10.32614/CRAN.package.widyr>
+
+Silge, J. y Robinson, D. (2016). tidytext: Text mining and analysis
+using tidy data principles in R. *Journal of Open Source Software*,
+*1*(3). <https://doi.org/10.21105/joss.00037>
+
+Wickham, H. (2016). *ggplot2: Elegant graphics for data analysis*.
+Springer-Verlag New York. <https://ggplot2.tidyverse.org>
+
+Wickham, H. (2023). *stringr: Simple, consistent wrappers for common
+string operations* (versión 1.5.1) \[Paquete de R\].
+<https://doi.org/10.32614/CRAN.package.stringr>
+
+Wickham, H., François, R., Henry, L., Müller, K. y Vaughan, D. (2023).
+*dplyr: A grammar of data manipulation* (versión 1.1.4) \[Paquete de
+R\]. <https://doi.org/10.32614/CRAN.package.dplyr>
+
+Wickham, H. y Henry, L. (2025). *purrr: Functional programming tools*
+(versión 1.1.0) \[Paquete de R\].
+<https://doi.org/10.32614/CRAN.package.purrr>
+
+Wickham, H., Hester, J. y Bryan, J. (2024). *readr: Read rectangular
+text data* (versión 2.1.5) \[Paquete de R\].
+<https://doi.org/10.32614/CRAN.package.readr>
+
+Wickham, H., Vaughan, D. y Girlich, M. (2024). *tidyr: Tidy messy data*
+(versión 1.3.1) \[Paquete de R\].
+<https://doi.org/10.32614/CRAN.package.tidyr>
+
+Xie, Y. (2025). *knitr: A general-purpose package for dynamic report
+generation in R* (versión 1.50) \[Paquete de R\].
+<https://yihui.org/knitr/>
 
 ## Anexos
 
@@ -732,8 +778,6 @@ source("03_graficos.R")
 
 Repositorio del proyecto:
 <https://github.com/corgab33/Proyecto-Grupal-CA0204>
-
-<!-- Pendiente: gráficos o tablas de alto valor, sin código. -->
 
 
 ```{r}
