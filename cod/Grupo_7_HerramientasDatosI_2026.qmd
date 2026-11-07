@@ -160,20 +160,11 @@ df$Released_Year[which(is.na(df$Released_Year))] <- 1995
 
 ### Técnicas y herramientas
 
-<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
-Para los análisis se filtra `df` para que solo contenga las observaciones en las que existe cálificación de `Meta_score`, es decir eliminamos las observaciones con ``NA`.
-
-#### Análisis sinópsis:
-
-Para el análisis de la sinópsis empleamos la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar y eliminar artículos que no aportan información relevante de las tramas de las peliculas. Además filtramos por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, es decir,  mide la fuerza en la relación de las variables, esto nos pérmitira obtener una mejor aproximación a las tématicas frecuentes que analizar por una sola palabra, además se forman narrativas más completas.
-=======
-<!-- Pendiente: describir cada técnica y cómo responde al objetivo. -->
 Para los análisis se filtra `df` para que solo contenga las observaciones en las que existe cálificación de `Meta_score`, es decir se eliminan las observaciones con ``NA`.
 
 #### Análisis sinópsis:
 
 Se empleó la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar artículos que no aportan información relevante de las tramas de las peliculas. Además, se filtró por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, esto permite obtener una mejor aproximación a las tématicas frecuentes y además, se forman narrativas más completas.
->>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 
 Para extraer los resultados de los análisis se crearon las funciones `analizar.palabra` y `analizar.par`, que lee una palabra y un par de palabras, respectivamente, y arroja un tibble que contiene un análisis estadístico con las variables: peliculas, cantidad de peliculas contienen palabra/s; porcentaje, proporción del total; imdb y meta, que contienen el promedio de calificación de esas peliculas para cada palabra o par.
 
@@ -578,18 +569,10 @@ pueden observar algunos patrones narrativos como: historias desarolladas
 durante las guerras mundiales, siendo más frecuentes narrativas
 ambientadas en la segunda; relatos de relaciones paternofiliales;
 narrativas que exploran encontrar el amor; historias basadas en la
-<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
 realidad, tipo biográficas; relacionadas con el crimen o la justicia,
-cómo acusaciones de homicidios e historias de índole agentes secretos.
-Cabe recalcar que estas relaciones solo
-analizan pares de palabras que son probables de ir juntas en diferentes
-peliculas y que independientemente no representan una cantidad
-=======
-realidad, tipo biograficas; relacionadas con el crimen o la justicia,
 cómo acusaciones de homicidios e historias de índole detective investiga
 crimen o de agentes secretos. Cabe recalcar que estas relaciones solo
 analizan pares de palabras que son probables de ir juntas y que independientemente no representan una cantidad
->>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 significativa de las peliculas del dataset.
 
 ```{r}
@@ -631,14 +614,9 @@ resultados.par %>%
 
 Por otro lado, las palabras (únicas) más frecuentes, filtradas por
 relevancia, apoyan los resultados de los pares en el apartado de
-historias de guerra, cuya palabra *war* por si sola se encuentra en $6%$ de
+historias de guerra, cuya palabra *war* por si sola se encuentra en 6% de
 las peliculas del dataset. Otras palabras con peso incluyen relaciones
-<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
-interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta 
-mencionar que los resultados son limitados pues las palabras por si
-=======
 interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta mencionar que las palabras por si
->>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 solas no revelan una narrativa, por lo que las interpretaciones pueden
 resultar especulativas o sesgadas, además que no pertenecen a una
 cantidad significativa de peliculas e incluso pueden aparecer juntas por
@@ -675,21 +653,11 @@ resultados.palabra %>%
   )
 ```
 
-<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
-En cuantó a las conclusiones que podemos realizar de este análisis
-exploratorio, podemos decir que en las tablas reportadas, el público
-general representado por la calificación imdb muestra tendencia hacia
-narrativas orientadas a la guerra, particularmente a las referidas con
-la segunda guerra mundial y de encontrar el
-amor, por otro lado la crítica especializada representada por meta score
-parece coincidir en que las historias de la segunda guerra mundial
-=======
-Se podria decir que en las tablas reportadas, el público
+Se podría decir que en las tablas reportadas, el público
 general representado por la calificación imdb muestra tendencia hacia
 narrativas orientadas a la guerra, particularmente a las referidas con
 la segunda guerra mundial, e historias de detectives o de romance, por otro lado la crítica especializada representada por meta score
 parece coincidir en que las historias de guerra mundial
->>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 promedian mayor puntaje, así como una inclinación por relatos
 detectivescos o de agentes secretos.
 
@@ -697,30 +665,16 @@ Dadas las limitaciones, las conclusiones anteriores deben ser tomadas
 con reserva, pues en adición a las problemáticas presentadas, las
 cantidades de peliculas por palabras o palabra suelen variar y no ser
 proporcionales. Sin embargo si tenemos que extraer una narrativa con
-<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
-contundencia nos podemos decantar por las alusivas a la segunda guerra
-mundial o más general a la guerra pues son las que reunen mayor cantidad
+contundencia nos podemos decantar por las alusivas a la guerra pues son las que reunen mayor cantidad
 en porcentaje, y que a la vez promedian calificaciones destacadas.
 
-### Género 
+### Género
 
-En la data encontramos que géneros cómo drama, `Comedy`, `Adventure` y `Crime` son los más ubicuos, con especial enfásis en drama que aparece en más del 71% de las peliculas de la lista. Por otro lado géneros cómo `Sport, Musical` y `Film Noir` son los menos frecuentes, con menos del 2% de presencia. En cuánto a intersecciones de géneros encontramos que los tres más frecuentes incluyen `Drama`, `Comedy, Drama` y `Drama, Romance` reforzando la idea de Drama cómo género central.
-
-En cuánto a los distintos párametros encontramos en `resultados.generos` que en taquilla las peliculas que promedian más incluyen `Adventure`, `Sci-Fi` y `Action`, mientras que la crítica del público se orienta a peliculas cómo `Film-Noir`, `Western` y `War`, por otra parte la crítica especializada comparte preferencias por el `Film-Noir` y `Western`, además incluyen `Horror` en sus tres mejores calificados.
-
-Para contrastar podemos ver las combinaciones en `res.interseccion` de géneros más presentes, en lo que composiciones cómo `Crime, Drama`, se repiten entre los mejores calificados (meta e imdb), aunque la crítica especializada y taquilla eligen en cómun `Animation, Adventure, Comedy` y `Drama, Romance` cómo los géneros de mayor éxito, además los mayores éxitos en taquilla lo recibe el género compuesto por `Accion, Adventure, Sci-Fi`. Asimismo también encontramos que el apartado crítica suele diferir más en los géneros `Action, Adventure, Sci-Fi`; `Crime, Drama, Thriller` y `Action, Crime, Drama`. La tendencia es que el público valora peliculas con estas características, en mayor medida que su contraparte especializada.
-=======
-contundencia nos podemos decantar por las alusivas a la guerra pues son las que reunen mayor cantidad
-en porcentaje, y que a promedian calificaciones destacadas.
-
-### Género 
-
-En la data se encontró que géneros cómo drama, `Comedy`, `Adventure` y `Crime` son los más ubicuos, con especial enfásis en drama que aparece en más del $71%$ de las peliculas de la lista. Por otro lado géneros cómo `Sport, Musical` y `Film Noir` son los menos frecuentes, con menos del $2%$ de presencia. En cuánto a intersecciones de géneros encontramos que los tres más frecuentes incluyen `Drama`, `Comedy, Drama` y `Drama, Romance``reforzando la idea de Drama cómo género central.
+En la data se encontró que géneros cómo drama, `Comedy`, `Adventure` y `Crime` son los más ubicuos, con especial enfásis en drama que aparece en más del 71% de las peliculas de la lista. Por otro lado géneros cómo `Sport, Musical` y `Film Noir` son los menos frecuentes, con menos del 2% de presencia. En cuánto a intersecciones de géneros encontramos que los tres más frecuentes incluyen `Drama`, `Comedy, Drama` y `Drama, Romance` reforzando la idea de Drama cómo género central.
 
 En cuánto a los distintos párametros encontramos en `resultados.generos` que en taquilla las peliculas que promedian más incluyen `Adventure`, `Sci-Fi` y `Action`, mientras que la crítica del público se orienta a peliculas cómo `Film-Noir`, `Western` y `War`, por otra parte la crítica especializada comparte preferencias por el `Film-Noir` y `Western`, además incluyen `Horror` en sus tres mejores calificados.
 
 Para contrastar se pueden ver las combinaciones en `res.interseccion` de géneros más presentes, en lo que composiciones cómo `Crime, Drama`, se repiten entre los mejores calificados (meta e imdb), aunque la crítica especializada y taquilla eligen en cómun `Animation, Adventure, Comedy` y `Drama, Romance` cómo los géneros de mayor éxito, además los mayores éxitos en taquilla lo recibe el género compuesto por `Accion, Adventure, Sci-Fi`. Asimismo también encontramos que el apartado crítica suele diferir más en los géneros `Action, Adventure, Sci-Fi`,  `Crime, Drama, Thriller` y `Action, Crime, Drama`, la tendencia es que el público valora peliculas con estas características, en mayor medida que su contraparte especializada.
->>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 
 ```{r}
 
@@ -815,12 +769,6 @@ source("03_graficos.R")
 ```
 
 
-<<<<<<< HEAD:cod/Grupo_7_HerramientasDatosI_2026.qmd
-Repositorio del proyecto:
-<https://github.com/corgab33/Proyecto-Grupal-CA0204>
-
-=======
->>>>>>> ac4823c (feat: agrega graficos de actores y directores):cod/Grupo_1_HerramientasDatosI_2026.qmd
 
 ```{r}
 tabla.generos <- resultados.generos %>%
