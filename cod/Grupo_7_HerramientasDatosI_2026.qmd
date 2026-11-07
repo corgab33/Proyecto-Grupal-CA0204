@@ -1,5 +1,5 @@
 ---
-title: "Grupo_1_HerramientasDatosI_2026"
+title: "Grupo_7_HerramientasDatosI_2026"
 subtitle: "Universidad de Costa Rica — CA0204 Herramientas de Datos I — Cine en datos"
 
 author: |-

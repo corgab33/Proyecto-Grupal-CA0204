@@ -24,5 +24,5 @@ Análisis de las 1000 películas mejor calificadas en IMDb para identificar qué
 
 1. Abrir `Proyecto-Grupal-CA0204.Rproj` en RStudio.
 2. Instalar los paquetes `readr`, `magrittr`, `dplyr` y `knitr`.
-3. Renderizar `cod/Grupo_1_HerramientasDatosI_2026.qmd` con Quarto.
+3. Renderizar `cod/Grupo_7_HerramientasDatosI_2026.qmd` con Quarto.
 4. Mover el PDF generado a `res/`.
