@@ -19,11 +19,6 @@ Trama.words <- peliculas %>%
             "No_of_Votes"))
 
 
-#Total de palabras, las 50 más frecuentes:
-conteo.pal <- Trama.words %>% 
-  count(word, sort = T) %>% head(50)
-
-
 #Calcula frecuencia de palabras en diferentes peliculas cuenta solo una
 #aparicion en la misma pelicula
 #Responde: ¿En cuántas películas aparece esta palabra?
@@ -31,15 +26,6 @@ frecuencias <- Trama.words %>%
   distinct(Series_Title, word) %>%
   count(word, sort = T) %>%
   filter(n >= 10)
-
-#Palabras separadas que aparecen juntas en peliculas distintas:
-pares.frecuentes <- Trama.words %>%
-  pairwise_count(
-    word,
-    Series_Title,
-    sort = TRUE
-  ) %>% 
-  filter(n >= 5, item1 < item2)
 
 
 #Filtrar data de la trama por frecuencia de aparición si la palabra aparece en 

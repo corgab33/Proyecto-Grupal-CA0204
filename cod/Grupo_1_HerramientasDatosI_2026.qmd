@@ -175,7 +175,17 @@ df$Released_Year[which(is.na(df$Released_Year))] <- 1995
 ### Técnicas y herramientas
 
 <!-- Pendiente: describir cada técnica y cómo responde al objetivo. -->
+Para los análisis se filtra `df` para que solo contenga las observaciones en las que existe cálificación de `Meta_score`, es decir eliminamos las observaciones con ``NA`.
 
+####Análisis sinópsis:
+
+Para el análisis de la sinópsis empleamos la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar y eliminar artículos que no aportan información relevante de las tramas de las peliculas. Además filtramos por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, es decir,  mide que tan probable es que si aparece una palabra también encontremos al par correspondiente, esto nos pérmitira obtener una mejor aproximación a las tématicas frecuentes que analizar por una sola palabra, además se forman narrativas más completas.
+
+Para extraer los resultados de los análisis creamos las funciones `analizar.palabra` y `analizar.par`, que lee una palabra y un par de palabras, respectivamente, y arroja un tibble que contiene un análisis estadístico con las variables: peliculas, cantidad de peliculas contienen palabra/s; porcentaje, proporción del total; imdb y meta, que contienen el promedio de calificación de esas peliculas para cada palabra o par.
+
+####Apartado análisis género:
+
+Para el análisis de género separamos los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que hacemos en sinópsis creamos las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género analizado, de forma individual o compuesta cómo se encuentran originalmente en ``df.original`.
 
 
 ## Resultados
