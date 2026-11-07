@@ -82,7 +82,7 @@ source("01_funciones_auxiliares.R")
 ```
 
 Luego, importamos el dataset a partir de un archivo `.csv`, mediante la
-librería `readr`
+librería `readr`.
 
 ```{r}
 
@@ -98,7 +98,7 @@ contenidos (clasificación por edades), duración, géneros, calificación
 IMDb (de 0 a 10), descripción, puntuación por críticas (de 0 a 100),
 director, actores/actrices principales, número de votos e ingresos
 brutos. Información encontrada mediante la función
-`df.original %>% glimpse()` y traducido por el equipo
+`df.original %>% glimpse()` y traducido por el equipo.
 
 ### Limpieza y preparación
 
@@ -109,7 +109,7 @@ con el fin de facilitar nuestro análisis.
 
 La variable `Poster_Link` contiene únicamente el enlace a la imagen del
 póster de cada película. Por lo que no aporta un valor cuantitativo o
-categórico relevante para los análisis planteados en este avance
+categórico relevante para los análisis planteados en este avance.
 
 ```{r}
 
@@ -165,13 +165,13 @@ df$Released_Year[which(is.na(df$Released_Year))] <- 1995
 <!-- Pendiente: describir cada técnica y cómo responde al objetivo. -->
 Para los análisis se filtra `df` para que solo contenga las observaciones en las que existe cálificación de `Meta_score`, es decir eliminamos las observaciones con ``NA`.
 
-####Análisis sinópsis:
+#### Análisis sinópsis:
 
 Para el análisis de la sinópsis empleamos la función `tidytext::unnest_tokens()` para divdidir la columna `Overview` en palabras individuales, usando un `anti_join()` con el tibble `stop_words` para filtar y eliminar artículos que no aportan información relevante de las tramas de las peliculas. Además filtramos por frecuencia de aparición en distintas peliculas, asimismo se crea el tibble `corr.pares` usando la función `widyr::pairwise_cor()`, que toma dos palabras de la lista y calcula la correlación entre las apariciones de ambas palabras en una misma pelicula, es decir,  mide que tan probable es que si aparece una palabra también encontremos al par correspondiente, esto nos pérmitira obtener una mejor aproximación a las tématicas frecuentes que analizar por una sola palabra, además se forman narrativas más completas.
 
 Para extraer los resultados de los análisis creamos las funciones `analizar.palabra` y `analizar.par`, que lee una palabra y un par de palabras, respectivamente, y arroja un tibble que contiene un análisis estadístico con las variables: peliculas, cantidad de peliculas contienen palabra/s; porcentaje, proporción del total; imdb y meta, que contienen el promedio de calificación de esas peliculas para cada palabra o par.
 
-####Apartado análisis género:
+#### Apartado análisis género:
 
 Para el análisis de género separamos los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que se hace en sinópsis creamos las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género, de forma individual (solo un género) o compuesta cómo se encuentran originalmente en `df.original`.
 
@@ -185,7 +185,7 @@ Para el análisis de género separamos los elementos de la columna `Genre` en g�
 Para empezar, se muestran las características principales del
 `dataframe` orginal, señalando la totalidad de películas, registros,
 cantidad de variables, distribución de géneros y directores y un rango
-en años de lanzamiento
+en años de lanzamiento.
 
 ```{r}
 #| echo: false
@@ -619,7 +619,7 @@ Por otro lado las palabras (únicas) más frecuentes, filtradas por
 relevancia, apoyan los resultados de los pares en el apartado de
 historias de guerra, cuya palabra por si sola se encuentra en $10.4%$ de
 las peliculas del dataset. Otras palabras con peso incluyen relaciones
-interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta
+interpersonales cómo *friends* o de familia cómo: *son, family, father*; y de individuos *woman, boy, girl*. De nuevo hace falta.
 
 mencionar que los resultados son limitados pues las palabras por si
 solas no revelan una narrativa, por lo que las interpretaciones pueden
@@ -775,5 +775,11 @@ grafico.gen.representativos
 ```{r}
 #Grafica diferencia de critica x género:
 grafico.diferencia.critica
-```
 
+```
+```{r}
+#Grafica analisis de duración
+grafico.duracion
+ 
+```
+La duración marca una leve diferencia, y tomando en cuenta la cantidad de películas que pertenecen a los rangos de duración, notamos que son relativamente pocas las que que tienen una duración mayor a dos horas y media (150 minutos o más), pero en términos de promedios, si tienen una calificación más alta las peliculas con mayor duración.

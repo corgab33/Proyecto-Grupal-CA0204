@@ -92,3 +92,39 @@ grafico.gen.representativos <- ggplot(
   )
 
 
+# Gráfica de calificación promedio según rango de duración
+
+grafico.duracion <- indicadores.duracion %>%
+  ggplot(
+    aes(
+      x = Rango,
+      y = Calificacion_promedio,
+      fill = Calificacion_promedio
+    )
+  ) +
+  geom_col(width = 0.7) +
+  geom_text(
+    aes(label = paste0("n = ", Cantidad)),
+    vjust = -0.5,
+    size = 3.5
+  ) +
+  scale_fill_gradient(
+    low = "#F4DDBB",
+    high = "#A64B43"
+  ) +
+  scale_y_continuous(
+    breaks = seq(5, 10, 1)
+  ) +
+  coord_cartesian(ylim = c(5, 10.5)) +
+  labs(
+    title = "Calificación IMDb promedio según duración",
+    subtitle = "Cantidad de películas por rango indicada sobre cada barra. Eje vertical desde 5",
+    x = "Rango de duración",
+    y = "Calificación promedio IMDb",
+    fill = "Calificación"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 20, hjust = 1)
+  )
