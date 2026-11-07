@@ -36,8 +36,6 @@ editor:
 
 ## Introducción
 
-<!-- Pendiente: completar contexto, relevancia (máx. 1 página). -->
-
 El cine es una de las formas de entretenimiento y expresión cultural más influyentes a nivel mundial. Gracias a plataformas como IMDb (Internet Movie Database), es posible acceder a grandes volúmenes de información sobre películas, incluyendo sinopsis de películas, teasers, recomendaciones, reseñas y calificaciones tanto del público *(IMDb rating)* como de la crítica especializada *(Meta score)*. Estos datos permiten estudiar qué características comparten las películas mejor valoradas y cómo distintos elementos, como los actores, directores, géneros y las historias narradas, se relacionan con su recepción por parte de las audiencias.
 
 La relevancia de este tema radica en la posibilidad de identificar patrones presentes en las películas más reconocidas y mejor valoradas. El estudio de aspectos como el elenco, la dirección, la distribución de géneros, diferencias entre la opinión del público y la crítica especializada, así como los temas narrativos recurrentes en las tramas, permite comprender mejor las características que predominan en las producciones con mayor reconocimiento. Asimismo, este tipo de análisis constituye un ejemplo práctico de cómo las herramientas de ciencia de datos pueden utilizarse para extraer conocimiento útil a partir de grandes volúmenes de información textual y numérica.
@@ -80,8 +78,6 @@ library(stringr)
 ```{r}
 #Carga documentos funciones y gráficos:
 source("01_funciones_auxiliares.R")
-
-source("03_graficos.R")
 
 ```
 
@@ -564,11 +560,10 @@ promedio.
 ### Trama peliculas
 
 ```{r}
-#Carga documento de análisis de trama y género:
-
 source("02_analisis_trama_y_genero.R")
 
 ```
+
 
 En cuánto al análisis de trama se encontraron resultados interesentes.
 Para los pares de palabras que conjuntamente son más frecuentes, se
@@ -730,6 +725,12 @@ IMDb. (s.f.). Apolo 13 (1995). Recuperado el 5 de noviembre de 2026, de
 IMDb
 
 ## Anexos
+
+```{r}
+#Carga gráficos:
+source("03_graficos.R")
+```
+
 
 Repositorio del proyecto:
 <https://github.com/corgab33/Proyecto-Grupal-CA0204>
