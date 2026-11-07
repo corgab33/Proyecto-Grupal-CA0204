@@ -677,7 +677,7 @@ contundencia nos podemos decantar por las alusivas a la segunda guerra
 mundial o más general a la guerra pues son las que reunen mayor cantidad
 en porcentaje, y que a promedian calificaciones destacadas.
 
-###Género 
+### Género 
 
 En la data encontramos que géneros cómo drama, `Comedy`, `Adventure` y `Crime` son los más ubicuos, con especial enfásis en drama que aparece en más del $71%$ de las peliculas de la lista. Por otro lado géneros cómo `Sport, Musical` y `Film Noir` son los menos frecuentes, con menos del $2%$ de presencia. En cuánto a intersecciones de géneros encontramos que los tres más frecuentes incluyen `Drama`, `Comedy, Drama` y `Drama, Romance``reforzando la idea de Drama cómo género central.
 
@@ -696,9 +696,8 @@ res.interseccion %>%
     taquilla = round(taquilla/ 10e5, 2)
   ) %>%
   select(
-    `Combinación de géneros` = genero,
+    `Géneros` = genero,
     Películas = peliculas,
-    `% Películas`,
     IMDb,
     MetaScore,
     `Dif. Crítica`,
