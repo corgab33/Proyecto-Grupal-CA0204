@@ -495,6 +495,7 @@ directors.grouping <- df.actors.directors |>
     ) |>
     select(director, n, mean.rating, mean.revenue)
 
+
 ```
 
 ```{r}
@@ -734,6 +735,7 @@ Repositorio del proyecto:
 
 <!-- Pendiente: gráficos o tablas de alto valor, sin código. -->
 
+
 ```{r}
 tabla.generos <- resultados.generos %>%
   arrange(desc(peliculas)) %>%
@@ -741,13 +743,11 @@ tabla.generos <- resultados.generos %>%
 
 n1 <- ceiling(nrow(tabla.generos)/2)
 
-tabla1 <- tabla.generos[1:10, ]
-tabla2 <- tabla.generos[11:20, ]
+tabla1 <- tabla.generos[1:7, ]
+tabla2 <- tabla.generos[8:14, ]
 
-tabla3 <- tabla.generos[21, ]
-tabla3[2:10, 1] <- c("", "", "", "", "", "", "", "", "")
-tabla3 <- tabla3 %>% mutate(peliculas = as.character(peliculas))
-tabla3[2:10, 2] <- c("", "", "", "", "", "", "", "", "")
+tabla3 <- tabla.generos[15:21,]
+
 
 tabla.compacta <- tibble(
   `Genero 1` = tabla1$genero,
@@ -762,9 +762,11 @@ tabla.compacta <- tibble(
 
 kable(
   tabla.compacta,
-  caption = "Tabla 1: Representatividad de los géneros en peliculas"
+  caption = "Tabla 1: Representatividad de los géneros en peliculas",
+  col.names = c("Genero", "Pelicula", "   ","Genero", "Pelicula", "   ","Genero", "Pelicula")
 )
 ```
+*Tabla 1: Representatividad de los géneros en peliculas*
 ```{r}
 #Graficos análisis género:
 grafico.gen.representativos
