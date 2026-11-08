@@ -168,7 +168,7 @@ Se empleó la función `tidytext::unnest_tokens()` para divdidir la columna `Ove
 
 Para extraer los resultados de los análisis se crearon las funciones `analizar.palabra` y `analizar.par`, que lee una palabra y un par de palabras, respectivamente, y arroja un tibble que contiene un análisis estadístico con las variables: peliculas, cantidad de peliculas contienen palabra/s; porcentaje, proporción del total; imdb y meta, que contienen el promedio de calificación de esas peliculas para cada palabra o par.
 
-#### Apartado análisis género:
+#### Análisis género:
 
 Para el análisis de género se separaron los elementos de la columna `Genre` en géneros individuales. De una forma muy similar a lo que se hace en sinópsis, se crearon las funciones `analizar.genero` y `analizar.genero.unico`, cuya única diferencia es que en el segundo para que un género sea contabilizado la coincidencia debe ser total y no parcial. Estas funciones de manera análoga a las de análisis de sinópsis crean un tibble con resumenes estadísticos, de las peliculas que pertenecen a cada género, de forma individual (solo un género) o compuesta cómo se encuentran originalmente en `df.original`.
 
