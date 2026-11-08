@@ -738,14 +738,14 @@ Los análisis muestran que ninguna característica, por sí sola, asegura el
 éxito al mismo tiempo ante el público, la crítica y la taquilla. Estas tres
 medidas siguen caminos distintos: la correlación entre la calificación IMDb
 y el Metascore es de apenas 0.27, y los directores con mejor calificación
-(Christopher Nolan, Frank Darabont y Francis Ford Coppola) no son los que
-generan más ingresos (Anthony Russo, J. J. Abrams y James Cameron).
+(`Christopher Nolan`, `Frank Darabont` y `Francis Ford Coppola`) no son los que
+generan más ingresos (`Anthony Russo, J. J. Abrams y James Cameron`).
 
 El género es la característica que más acerca las tres dimensiones. La
-combinación Animation, Adventure, Comedy tiene uno de los Metascore más
+combinación `Animation, Adventure, Comedy` tiene uno de los Metascore más
 altos (83.30), una taquilla promedio de 225.17 millones de dólares y una
 calificación IMDb (7.93) cercana al promedio general (7.95). En cambio,
-Action, Adventure, Sci-Fi registra la taquilla más alta (280.89 millones),
+`Action, Adventure, Sci-Fi` registra la taquilla más alta (280.89 millones),
 pero el Metascore más bajo entre las combinaciones frecuentes (71.52). El
 drama, presente en más del 71% de las películas, sostiene buenas
 calificaciones, pero no destaca en taquilla.
@@ -866,11 +866,15 @@ kable(
 grafico.gen.representativos
 
 ```
+En este gráfico podemos visualizar las preferencias del público en los géneros individuales más representativos del dataset. En color más intenso notamos que `Drama`, `Adventure`, `Mistery` y `Action` reciben en promedio las calificaciones más altas, mientras que `Comedy` y `Thriller` suelen tener valoraciones ligeramente menores.
+
 ```{r}
 # Grafica diferencia de critica x género:
 grafico.diferencia.critica
 
 ```
+En este gráfico vemos que géneros cómo `Film-Noir`, `Western`, `Horror` son valorados con calificaciones más altas por parte de la crítica que por el público, mientras que géneros cómo `Sport`, `Action` y `Crime` son más valorados por el público, asimismo tenemos que en géneros cómo `History`, `War` y `Mistery` crítica y público tienden a concidir, resultando en calificaciones muy parecidas.
+
 ```{r}
 # Grafica analisis de duración
 grafico.duracion
